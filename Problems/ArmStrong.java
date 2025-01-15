@@ -14,8 +14,7 @@ public class ArmStrong {
         
         // Calculate the sum of the digits raised to the power of the number of digits
         while (n != 0) {
-            int digit = n % 10;
-            sum += Math.pow(digit, numberOfDigits);
+            sum += Math.pow(n%10, numberOfDigits);
             n /= 10;
         }
         

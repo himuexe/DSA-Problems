@@ -4,8 +4,11 @@ public class SumTillN {
 
     // Method to calculate the sum of numbers from 1 to n
     public static int sumUpToN(int number) {
-        // Using the formula for the sum of the first n natural numbers
-        return (number * (number + 1)) / 2;
+        if(number ==0){
+            return 0;
+        }
+        sumUpToN(number-1);
+        return number + sumUpToN(number-1);
     }
 
     public static void main(String[] args) {
