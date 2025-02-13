@@ -1,3 +1,5 @@
+package AC.Functions;
+
 import java.util.Scanner;
 
 public class Binary {

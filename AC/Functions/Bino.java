@@ -1,9 +1,8 @@
 import java.math.BigInteger;
 import java.util.Scanner;
 
-public class BinomialCoeff {
-
-    public static BigInteger calculateFactorial(int number) {
+public class Bino {
+   public static BigInteger calculateFactorial(int number) {
         BigInteger result = BigInteger.ONE;
         for (int i = 1; i <= number; i++) {
             result = result.multiply(BigInteger.valueOf(i));
