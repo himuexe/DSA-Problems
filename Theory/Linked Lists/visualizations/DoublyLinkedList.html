@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubly Linked List - Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #444444;
+        }
+
+        .visualization-section {
+            margin-bottom: 40px;
+            border: 1px solid #000000;
+            padding: 20px;
+            background-color: #fafafa;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 10px;
+        }
+
+        .linked-list {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+        }
+
+        .node {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            min-width: 160px;
+            height: 60px;
+        }
+
+        .node-pointer-prev {
+            width: 35px;
+            text-align: center;
+            font-size: 1rem;
+            background-color: #f0f0f0;
+            border-right: 2px solid #000000;
+        }
+
+        .node-data {
+            flex: 1;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0 15px;
+            border-right: 2px solid #000000;
+        }
+
+        .node-pointer-next {
+            width: 35px;
+            text-align: center;
+            font-size: 1rem;
+            background-color: #f0f0f0;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #000000;
+        }
+
+        .double-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .arrow-forward {
+            font-size: 1.2rem;
+            color: #000000;
+        }
+
+        .arrow-backward {
+            font-size: 1.2rem;
+            color: #666666;
+        }
+
+        .null-pointer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #666666;
+            border: 2px solid #666666;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+        }
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .operation-card {
+            border: 1px solid #000000;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+
+        .operation-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 5px;
+        }
+
+        .complexity {
+            font-size: 0.9rem;
+            color: #555555;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .characteristics {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .characteristics li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .characteristics li:before {
+            content: "▶ ";
+            font-weight: bold;
+        }
+
+        .code-example {
+            background-color: #f8f8f8;
+            border: 1px solid #cccccc;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            white-space: pre-line;
+        }
+
+        .bidirectional-note {
+            background-color: #f0f0f0;
+            border-left: 4px solid #000000;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Doubly Linked List</h1>
+            <p>A bidirectional linear data structure with forward and backward traversal capabilities</p>
+        </div>
+
+        <!-- Structure Visualization -->
+        <div class="visualization-section">
+            <h2 class="section-title">Structure Diagram</h2>
+            <div class="linked-list">
+                <div class="null-pointer">NULL</div>
+                <div class="double-arrow">
+                    <span class="arrow-forward">→</span>
+                    <span class="arrow-backward">←</span>
+                </div>
+                <div class="node">
+                    <div class="node-pointer-prev">←</div>
+                    <div class="node-data">10</div>
+                    <div class="node-pointer-next">→</div>
+                </div>
+                <div class="double-arrow">
+                    <span class="arrow-forward">→</span>
+                    <span class="arrow-backward">←</span>
+                </div>
+                <div class="node">
+                    <div class="node-pointer-prev">←</div>
+                    <div class="node-data">20</div>
+                    <div class="node-pointer-next">→</div>
+                </div>
+                <div class="double-arrow">
+                    <span class="arrow-forward">→</span>
+                    <span class="arrow-backward">←</span>
+                </div>
+                <div class="node">
+                    <div class="node-pointer-prev">←</div>
+                    <div class="node-data">30</div>
+                    <div class="node-pointer-next">→</div>
+                </div>
+                <div class="double-arrow">
+                    <span class="arrow-forward">→</span>
+                    <span class="arrow-backward">←</span>
+                </div>
+                <div class="null-pointer">NULL</div>
+            </div>
+            <div class="bidirectional-note">
+                <strong>Bidirectional Navigation:</strong> Each node contains data and two pointers - one pointing to the next node and another to the previous node, enabling traversal in both directions.
+            </div>
+        </div>
+
+        <!-- Key Characteristics -->
+        <div class="visualization-section">
+            <h2 class="section-title">Key Characteristics</h2>
+            <ul class="characteristics">
+                <li><strong>Bidirectional:</strong> Can traverse both forward and backward</li>
+                <li><strong>Dynamic Size:</strong> Can grow or shrink during runtime  </li>
+                <li><strong>Dual Pointers:</strong> Each node has prev and next pointers</li>
+                <li><strong>Efficient Deletion:</strong> Can delete a node in O(1) if reference is known</li>
+                <li><strong>Memory Overhead:</strong> Requires extra memory for previous pointers</li>
+            </ul>
+        </div>
+
+        <!-- Common Operations -->
+        <div class="visualization-section">
+            <h2 class="section-title">Common Operations</h2>
+            <div class="operations-grid">
+                <div class="operation-card">
+                    <div class="operation-title">Insert at Front</div>
+                    <p>Add a new node at the beginning of the list</p>
+                    <div class="complexity">Time: O(1) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Insert at End</div>
+                    <p>Add a new node at the end of the list</p>
+                    <div class="complexity">Time: O(1) with tail | O(n) without tail</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Insert at Position</div>
+                    <p>Add a new node at a specific index</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete at Front</div>
+                    <p>Remove the first node from the list</p>
+                    <div class="complexity">Time: O(1) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete at End</div>
+                    <p>Remove the last node from the list</p>
+                    <div class="complexity">Time: O(1) with tail | O(n) without tail</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete by Reference</div>
+                    <p>Remove a node when you have its reference</p>
+                    <div class="complexity">Time: O(1) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Forward Traversal</div>
+                    <p>Print list from head to tail</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Backward Traversal</div>
+                    <p>Print list from tail to head</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Node Structure -->
+        <div class="visualization-section">
+            <h2 class="section-title">Node Structure</h2>
+            <div class="code-example">class DoublyNode {
+    int data;            // Stores the actual value
+    DoublyNode prev;     // Points to the previous node
+    DoublyNode next;     // Points to the next node
+    
+    // Constructor
+    DoublyNode(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}</div>
+        </div>
+
+        <!-- Advantages & Disadvantages -->
+        <div class="visualization-section">
+            <h2 class="section-title">Pros & Cons</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3 style="color: #008000; margin-bottom: 10px;">✓ Advantages</h3>
+                    <ul style="list-style-type: none;">
+                        <li>• Bidirectional traversal</li>
+                        <li>• Efficient deletion with reference</li>
+                        <li>• Better for undo operations</li>
+                        <li>• Can traverse backward easily</li>
+                        <li>• Insertion/deletion at both ends is O(1)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #cc0000; margin-bottom: 10px;">✗ Disadvantages</h3>
+                    <ul style="list-style-type: none;">
+                        <li>• Extra memory for prev pointers</li>
+                        <li>• More complex pointer manipulation</li>
+                        <li>• Not cache-friendly</li>
+                        <li>• Higher space complexity</li>
+                        <li>• More complex implementation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison with Singly Linked List -->
+        <div class="visualization-section">
+            <h2 class="section-title">vs Singly Linked List</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #000; padding: 10px; text-align: left;">Feature</th>
+                            <th style="border: 1px solid #000; padding: 10px; text-align: center;">Singly Linked</th>
+                            <th style="border: 1px solid #000; padding: 10px; text-align: center;">Doubly Linked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px;"><strong>Memory per Node</strong></td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">1 pointer</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">2 pointers</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px;"><strong>Traversal</strong></td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">Forward only</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">Bidirectional</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px;"><strong>Delete with Reference</strong></td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">O(n)</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">O(1)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px;"><strong>Implementation</strong></td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">Simpler</td>
+                            <td style="border: 1px solid #000; padding: 8px; text-align: center;">Complex</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

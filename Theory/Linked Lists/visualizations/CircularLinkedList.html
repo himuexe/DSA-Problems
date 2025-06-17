@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Linked List - Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #444444;
+        }
+
+        .visualization-section {
+            margin-bottom: 40px;
+            border: 1px solid #000000;
+            padding: 20px;
+            background-color: #fafafa;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 10px;
+        }
+
+        .circular-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            padding: 40px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            position: relative;
+        }
+
+        .circular-list {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .node {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+        }
+
+        .node-data {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0 10px;
+            border-right: 2px solid #000000;
+        }
+
+        .node-pointer {
+            width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            background-color: #f0f0f0;
+        }
+
+        .node1 { top: 20px; left: 50%; transform: translateX(-50%); }
+        .node2 { top: 50%; right: 20px; transform: translateY(-50%); }
+        .node3 { bottom: 20px; left: 50%; transform: translateX(-50%); }
+        .node4 { top: 50%; left: 20px; transform: translateY(-50%); }
+
+        .circular-arrow {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .arrow1 { top: 40px; right: 80px; transform: rotate(45deg); }
+        .arrow2 { bottom: 80px; right: 40px; transform: rotate(135deg); }
+        .arrow3 { bottom: 40px; left: 80px; transform: rotate(225deg); }
+        .arrow4 { top: 80px; left: 40px; transform: rotate(315deg); }
+
+        .center-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #666666;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 10px;
+            border: 1px dashed #666666;
+            border-radius: 50%;
+        }
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .operation-card {
+            border: 1px solid #000000;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+
+        .operation-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 5px;
+        }
+
+        .complexity {
+            font-size: 0.9rem;
+            color: #555555;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .characteristics {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .characteristics li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .characteristics li:before {
+            content: "▶ ";
+            font-weight: bold;
+        }
+
+        .code-example {
+            background-color: #f8f8f8;
+            border: 1px solid #cccccc;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            white-space: pre-line;
+        }
+
+        .circular-note {
+            background-color: #f0f0f0;
+            border-left: 4px solid #000000;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .linear-view {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+        }
+
+        .linear-node {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            min-width: 100px;
+            height: 50px;
+        }
+
+        .linear-node-data {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0 10px;
+            border-right: 2px solid #000000;
+        }
+
+        .linear-node-pointer {
+            width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            background-color: #f0f0f0;
+        }
+
+        .curved-arrow {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Circular Linked List</h1>
+            <p>A linked list where the last node points back to the first node, forming a circular structure</p>
+        </div>
+
+        <!-- Circular Structure Visualization -->
+        <div class="visualization-section">
+            <h2 class="section-title">Circular Structure Diagram</h2>
+            <div class="circular-container">
+                <div class="circular-list">
+                    <div class="node node1">
+                        <div class="node-data">10</div>
+                        <div class="node-pointer">→</div>
+                    </div>
+                    <div class="node node2">
+                        <div class="node-data">20</div>
+                        <div class="node-pointer">→</div>
+                    </div>
+                    <div class="node node3">
+                        <div class="node-data">30</div>
+                        <div class="node-pointer">→</div>
+                    </div>
+                    <div class="node node4">
+                        <div class="node-data">40</div>
+                        <div class="node-pointer">→</div>
+                    </div>
+                    
+                    <div class="circular-arrow arrow1">↗</div>
+                    <div class="circular-arrow arrow2">↘</div>
+                    <div class="circular-arrow arrow3">↙</div>
+                    <div class="circular-arrow arrow4">↖</div>
+                    
+                    <div class="center-label">CIRCULAR<br>LOOP</div>
+                </div>
+            </div>
+            <div class="circular-note">
+                <strong>Circular Property:</strong> The last node's pointer points back to the first node (head) instead of NULL, creating a continuous loop with no end.
+            </div>
+        </div>
+
+        <!-- Linear Representation -->
+        <div class="visualization-section">
+            <h2 class="section-title">Linear Representation</h2>
+            <div class="linear-view">
+                <div class="linear-node">
+                    <div class="linear-node-data">10</div>
+                    <div class="linear-node-pointer">→</div>
+                </div>
+                <span class="curved-arrow">→</span>
+                <div class="linear-node">
+                    <div class="linear-node-data">20</div>
+                    <div class="linear-node-pointer">→</div>
+                </div>
+                <span class="curved-arrow">→</span>
+                <div class="linear-node">
+                    <div class="linear-node-data">30</div>
+                    <div class="linear-node-pointer">→</div>
+                </div>
+                <span class="curved-arrow">→</span>
+                <div class="linear-node">
+                    <div class="linear-node-data">40</div>
+                    <div class="linear-node-pointer">→</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <span style="font-size: 1.2rem; font-weight: bold;">↩ Last node points back to Head (10) ↩</span>
+            </div>
+        </div>
+
+        <!-- Key Characteristics -->
+        <div class="visualization-section">
+            <h2 class="section-title">Key Characteristics</h2>
+            <ul class="characteristics">
+                <li><strong>No NULL Termination:</strong> Last node points to the first node</li>
+                <li><strong>Continuous Loop:</strong> Can traverse infinitely without reaching end</li>
+                <li><strong>Single Entry Point:</strong> Usually maintains a reference to head node</li>
+                <li><strong>Efficient for Round-Robin:</strong> Perfect for cyclic operations</li>
+                <li><strong>Memory Efficient:</strong> No wasted NULL pointer in the last node</li>
+            </ul>
+        </div>
+
+        <!-- Common Operations -->
+        <div class="visualization-section">
+            <h2 class="section-title">Common Operations</h2>
+            <div class="operations-grid">
+                <div class="operation-card">
+                    <div class="operation-title">Insert at Front</div>
+                    <p>Add a new node at the beginning and update last node's pointer</p>
+                    <div class="complexity">Time: O(n) to find last | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Insert at End</div>
+                    <p>Add a new node after the last node</p>
+                    <div class="complexity">Time: O(n) to find last | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Insert at Position</div>
+                    <p>Add a new node at a specific index</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete at Front</div>
+                    <p>Remove the first node and update last node's pointer</p>
+                    <div class="complexity">Time: O(n) to find last | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete at End</div>
+                    <p>Remove the last node from the circular list</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Delete by Value</div>
+                    <p>Find and remove a node with specific data</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Traverse List</div>
+                    <p>Visit all nodes exactly once</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Check if Circular</div>
+                    <p>Verify the circular property of the list</p>
+                    <div class="complexity">Time: O(n) | Space: O(1)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Node Structure -->
+        <div class="visualization-section">
+            <h2 class="section-title">Node Structure</h2>
+            <div class="code-example">class CircularNode {
+    int data;           // Stores the actual value  
+    CircularNode next;  // Points to the next node (never NULL)
+    
+    // Constructor
+    CircularNode(int data) {
+        this.data = data;
+        this.next = this; // Points to itself initially
+    }
+}</div>
+        </div>
+
+        <!-- Applications -->
+        <div class="visualization-section">
+            <h2 class="section-title">Real-World Applications</h2>
+            <div class="operations-grid">
+                <div class="operation-card">
+                    <div class="operation-title">Round-Robin Scheduling</div>
+                    <p>CPU scheduling where processes are executed in circular order</p>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Music Playlist</div>
+                    <p>Continuous playback where last song loops back to first</p>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Memory Management</div>
+                    <p>Circular buffer for efficient memory usage</p>
+                </div>
+                <div class="operation-card">
+                    <div class="operation-title">Game Development</div>
+                    <p>Turn-based games where players cycle continuously</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advantages & Disadvantages -->
+        <div class="visualization-section">
+            <h2 class="section-title">Pros & Cons</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3 style="color: #008000; margin-bottom: 10px;">✓ Advantages</h3>
+                    <ul style="list-style-type: none;">
+                        <li>• Perfect for cyclic operations</li>
+                        <li>• No NULL pointer in last node</li>
+                        <li>• Efficient for round-robin algorithms</li>
+                        <li>• Can start traversal from any node</li>
+                        <li>• Useful for continuous loops</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #cc0000; margin-bottom: 10px;">✗ Disadvantages</h3>
+                    <ul style="list-style-type: none;">
+                        <li>• Risk of infinite loops</li>
+                        <li>• Complex termination conditions</li>
+                        <li>• Harder to detect end of list</li>
+                        <li>• More complex insertion/deletion</li>
+                        <li>• Debugging can be challenging</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="visualization-section">
+            <h2 class="section-title">⚠️ Important Implementation Notes</h2>
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px;">
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li><strong>Infinite Loop Prevention:</strong> Always use proper termination conditions when traversing</li>
+                    <li><strong>Empty List Handling:</strong> Handle case where head is NULL carefully</li>
+                    <li><strong>Single Node Case:</strong> Node points to itself when list has only one element</li>
+                    <li><strong>Pointer Updates:</strong> Always update last node's pointer when modifying head</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
