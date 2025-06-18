@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List-Based Stack Visualization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #000000;
+            border-left: 4px solid #000000;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #333333;
+            margin-top: 25px;
+            font-size: 1.4em;
+        }
+
+        .intro {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stack-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            min-height: 200px;
+            flex-wrap: wrap;
+        }
+
+        .stack-visual {
+            border: 3px solid #000000;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            min-width: 300px;
+        }
+
+        .node {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .node.head {
+            border-color: #000000;
+            border-width: 3px;
+            background-color: #e8e8e8;
+        }
+
+        .node-data {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-right: 2px solid #333333;
+            margin-right: 10px;
+        }
+
+        .node-pointer {
+            width: 60px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666666;
+        }
+
+        .pointer-arrow {
+            font-size: 1.5em;
+            color: #000000;
+            margin: 0 10px;
+        }
+
+        .null-pointer {
+            color: #999999;
+            font-style: italic;
+        }
+
+        .stack-label {
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #000000;
+        }
+
+        .operation-demo {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .interactive-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .control-panel {
+            margin: 20px 0;
+        }
+
+        .control-panel input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .control-panel button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-panel button:hover {
+            background-color: #f0f0f0;
+            border-color: #333333;
+        }
+
+        .info-panel {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            text-align: center;
+            margin: 5px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .info-value {
+            font-size: 1.2em;
+            color: #333333;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #ffffff;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            border: 2px solid #000000;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .complexity-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .complexity-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background-color: #e8f5e8;
+            border: 2px solid #4CAF50;
+            color: #2E7D32;
+        }
+
+        .status-error {
+            background-color: #ffebee;
+            border: 2px solid #f44336;
+            color: #c62828;
+        }
+
+        .status-info {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+            color: #1565c0;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .code-example {
+            background-color: #f5f5f5;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .code-example h4 {
+            margin-top: 0;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empty-stack {
+            text-align: center;
+            color: #999999;
+            font-style: italic;
+            padding: 20px;
+            border: 2px dashed #cccccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .stack-container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                flex-direction: column;
+            }
+            
+            .node {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .node-data {
+                border-right: none;
+                border-bottom: 2px solid #333333;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Linked List-Based Stack Visualization</h1>
+        
+        <div class="intro">
+            <h3>Understanding Dynamic Node-Based Stacks</h3>
+            <p>
+                A <strong>Linked List-Based Stack</strong> uses nodes connected by pointers to store elements 
+                following the <strong>LIFO (Last In, First Out)</strong> principle. This implementation provides 
+                <strong>unlimited capacity</strong> (memory permitting) and <strong>O(1)</strong> operations.
+            </p>
+        </div>
+
+        <h2>🎯 Key Features & Characteristics</h2>
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon">🔄</div>
+                <h4>Dynamic Size</h4>
+                <p>Grows and shrinks as needed, no fixed capacity</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <h4>Fast Operations</h4>
+                <p>O(1) time complexity for all core operations</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔗</div>
+                <h4>Node-Based Storage</h4>
+                <p>Elements stored in linked nodes with pointers</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">♾️</div>
+                <h4>Unlimited Capacity</h4>
+                <p>Only limited by available system memory</p>
+            </div>
+        </div>
+
+        <h2>🎮 Interactive Stack Demonstration</h2>
+        <div class="interactive-section">
+            <div class="control-panel">
+                <input type="text" id="elementInput" placeholder="Enter element" maxlength="10">
+                <button onclick="pushElement()">Push</button>
+                <button onclick="popElement()">Pop</button>
+                <button onclick="peekElement()">Peek</button>
+                <button onclick="clearStack()">Clear</button>
+                <button onclick="searchElement()">Search</button>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-item">
+                    <div class="info-label">Size</div>
+                    <div class="info-value" id="sizeValue">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Is Empty</div>
+                    <div class="info-value" id="isEmptyValue">Yes</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Memory Usage</div>
+                    <div class="info-value" id="memoryValue">0 nodes</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Head Node</div>
+                    <div class="info-value" id="headValue">null</div>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="status-message hidden"></div>
+
+            <div class="stack-container">
+                <div class="stack-visual">
+                    <div class="stack-label">Linked List-Based Stack</div>
+                    <div id="stackNodes"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2>📊 Time & Space Complexity Analysis</h2>
+        <table class="complexity-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Time Complexity</th>
+                    <th>Space Complexity</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>push(element)</strong></td>
+                    <td>O(1)</td>
+                    <td>O(1)</td>
+                    <td>Add new node at head</td>
+                </tr>
+                <tr>
+                    <td><strong>pop()</strong></td>
+                    <td>O(1)</td>
+                    <td>O(1)</td>
+                    <td>Remove head node</td>
+                </tr>
+                <tr>
+                    <td><strong>peek()</strong></td>
+                    <td>O(1)</td>
+                    <td>O(1)</td>
+                    <td>Access head node data</td>
+                </tr>
+                <tr>
+                    <td><strong>isEmpty()</strong></td>
+                    <td>O(1)</td>
+                    <td>O(1)</td>
+                    <td>Check if head is null</td>
+                </tr>
+                <tr>
+                    <td><strong>size()</strong></td>
+                    <td>O(1)</td>
+                    <td>O(1)</td>
+                    <td>Return stored size counter</td>
+                </tr>
+                <tr>
+                    <td><strong>search(element)</strong></td>
+                    <td>O(n)</td>
+                    <td>O(1)</td>
+                    <td>Traverse nodes to find element</td>
+                </tr>
+                <tr>
+                    <td><strong>clear()</strong></td>
+                    <td>O(n)</td>
+                    <td>O(1)</td>
+                    <td>Remove all nodes (GC cleanup)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>💡 Implementation Details</h2>
+        <div class="operation-demo">
+            <h3>Node Structure & Pointer Management</h3>
+            <p>
+                The linked list-based stack uses a <code>StackNode</code> inner class to store data and 
+                maintain references to the next node. The stack maintains a <code>head</code> pointer 
+                to the top element.
+            </p>
+            
+            <div class="code-example">
+                <h4>Java Implementation Structure:</h4>
+                <pre>
+public class LinkedStack&lt;T&gt; {
+    private StackNode head;      // Points to top element
+    private int size;            // Current number of elements
+    
+    // Inner class for stack nodes
+    private class StackNode {
+        T data;                  // Element data
+        StackNode next;          // Reference to next node
+        
+        StackNode(T data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+    
+    // Push operation: O(1)
+    public void push(T element) {
+        StackNode newNode = new StackNode(element);
+        newNode.next = head;     // Point to current head
+        head = newNode;          // Update head to new node
+        size++;
+    }
+    
+    // Pop operation: O(1)
+    public T pop() {
+        if (isEmpty()) {
+            throw new StackUnderflowException();
+        }
+        T data = head.data;
+        head = head.next;        // Move head to next node
+        size--;
+        return data;
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h2>🎯 Use Cases & Applications</h2>
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon">🌐</div>
+                <h4>Web Browser History</h4>
+                <p>Managing back button navigation with unlimited history</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔄</div>
+                <h4>Recursive Algorithms</h4>
+                <p>Supporting deep recursion without size limits</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📝</div>
+                <h4>Expression Parsing</h4>
+                <p>Handling complex nested expressions of any depth</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎮</div>
+                <h4>Game State Management</h4>
+                <p>Storing unlimited game states for save/load functionality</p>
+            </div>
+        </div>
+
+        <h2>⚖️ Advantages vs Disadvantages</h2>
+        <div class="operation-demo">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li><strong>Unlimited Size:</strong> No fixed capacity constraints</li>
+                        <li><strong>Memory Efficient:</strong> Only allocates what's needed</li>
+                        <li><strong>Fast Operations:</strong> O(1) for all core operations</li>
+                        <li><strong>Flexible:</strong> Adapts to varying workloads</li>
+                        <li><strong>No Overflow:</strong> Never runs out of space (until system memory)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li><strong>Memory Overhead:</strong> Extra storage for pointers</li>
+                        <li><strong>Cache Performance:</strong> Non-contiguous memory access</li>
+                        <li><strong>Pointer Management:</strong> More complex implementation</li>
+                        <li><strong>Memory Fragmentation:</strong> Scattered node allocation</li>
+                        <li><strong>GC Pressure:</strong> Frequent allocation/deallocation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h2>🔧 Best Practices</h2>
+        <div class="operation-demo">
+            <h3>When to Use Linked List-Based Stacks:</h3>
+            <ul>
+                <li><strong>Unknown Size:</strong> When maximum capacity is unpredictable</li>
+                <li><strong>Variable Workloads:</strong> Applications with fluctuating stack usage</li>
+                <li><strong>Memory Flexibility:</strong> When you want to use only necessary memory</li>
+                <li><strong>No Size Limits:</strong> Applications requiring unlimited depth</li>
+                <li><strong>Dynamic Applications:</strong> Real-time systems with changing requirements</li>
+            </ul>
+            
+            <h3>Implementation Tips:</h3>
+            <ul>
+                <li>Always maintain proper head pointer references</li>
+                <li>Handle memory cleanup in pop operations</li>
+                <li>Keep track of size for O(1) size queries</li>
+                <li>Consider memory pooling for frequent operations</li>
+                <li>Implement proper null checks for robustness</li>
+            </ul>
+        </div>
+
+        <h2>🔍 Memory Layout Visualization</h2>
+        <div class="operation-demo">
+            <h3>Node Structure in Memory:</h3>
+            <p>
+                Each node contains the element data and a reference to the next node. 
+                The stack head always points to the most recently added element (top of stack).
+            </p>
+            <div style="text-align: center; margin: 20px 0;">
+                <code>
+                    HEAD → [Data|Next] → [Data|Next] → [Data|null]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Top)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Bottom)
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Node class for demonstration
+        class StackNode {
+            constructor(data) {
+                this.data = data;
+                this.next = null;
+            }
+        }
+
+        // Linked Stack implementation for demonstration
+        class LinkedStackDemo {
+            constructor() {
+                this.head = null;
+                this.size = 0;
+            }
+
+            push(element) {
+                const newNode = new StackNode(element);
+                newNode.next = this.head;
+                this.head = newNode;
+                this.size++;
+            }
+
+            pop() {
+                if (this.isEmpty()) {
+                    throw new Error("Stack Underflow: Cannot pop from empty stack");
+                }
+                const data = this.head.data;
+                this.head = this.head.next;
+                this.size--;
+                return data;
+            }
+
+            peek() {
+                if (this.isEmpty()) {
+                    throw new Error("Stack Underflow: Cannot peek at empty stack");
+                }
+                return this.head.data;
+            }
+
+            isEmpty() {
+                return this.head === null;
+            }
+
+            getSize() {
+                return this.size;
+            }
+
+            clear() {
+                this.head = null;
+                this.size = 0;
+            }
+
+            search(element) {
+                let current = this.head;
+                let position = 1;
+                
+                while (current !== null) {
+                    if (current.data === element) {
+                        return position;
+                    }
+                    current = current.next;
+                    position++;
+                }
+                return -1; // Not found
+            }
+
+            toArray() {
+                const result = [];
+                let current = this.head;
+                while (current !== null) {
+                    result.push(current.data);
+                    current = current.next;
+                }
+                return result;
+            }
+        }
+
+        // Initialize demo stack
+        const demoStack = new LinkedStackDemo();
+
+        // Update visual representation
+        function updateVisual() {
+            const stackNodes = document.getElementById('stackNodes');
+            stackNodes.innerHTML = '';
+
+            if (demoStack.isEmpty()) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-stack';
+                emptyDiv.textContent = 'Empty Stack (head = null)';
+                stackNodes.appendChild(emptyDiv);
+            } else {
+                let current = demoStack.head;
+                let position = 1;
+                
+                while (current !== null) {
+                    const nodeDiv = document.createElement('div');
+                    nodeDiv.className = 'node';
+                    if (position === 1) {
+                        nodeDiv.classList.add('head');
+                    }
+                    
+                    const dataDiv = document.createElement('div');
+                    dataDiv.className = 'node-data';
+                    dataDiv.textContent = current.data;
+                    
+                    const pointerDiv = document.createElement('div');
+                    pointerDiv.className = 'node-pointer';
+                    pointerDiv.textContent = current.next ? 'next' : 'null';
+                    if (!current.next) {
+                        pointerDiv.classList.add('null-pointer');
+                    }
+                    
+                    nodeDiv.appendChild(dataDiv);
+                    nodeDiv.appendChild(pointerDiv);
+                    stackNodes.appendChild(nodeDiv);
+                    
+                    if (current.next) {
+                        const arrowDiv = document.createElement('div');
+                        arrowDiv.className = 'pointer-arrow';
+                        arrowDiv.textContent = '↓';
+                        stackNodes.appendChild(arrowDiv);
+                    }
+                    
+                    current = current.next;
+                    position++;
+                }
+            }
+
+            // Update info panel
+            document.getElementById('sizeValue').textContent = demoStack.getSize();
+            document.getElementById('isEmptyValue').textContent = demoStack.isEmpty() ? 'Yes' : 'No';
+            document.getElementById('memoryValue').textContent = demoStack.getSize() + ' nodes';
+            document.getElementById('headValue').textContent = demoStack.isEmpty() ? 'null' : demoStack.head.data;
+        }
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                statusDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Push element
+        function pushElement() {
+            const input = document.getElementById('elementInput');
+            const element = input.value.trim();
+            
+            if (!element) {
+                showStatus('Please enter an element to push', 'error');
+                return;
+            }
+
+            demoStack.push(element);
+            showStatus(`✅ Pushed '${element}' onto stack`, 'success');
+            input.value = '';
+            updateVisual();
+        }
+
+        // Pop element
+        function popElement() {
+            try {
+                const element = demoStack.pop();
+                showStatus(`📤 Popped '${element}' from stack`, 'success');
+                updateVisual();
+            } catch (error) {
+                showStatus(`❌ ${error.message}`, 'error');
+            }
+        }
+
+        // Peek element
+        function peekElement() {
+            try {
+                const element = demoStack.peek();
+                showStatus(`👁️ Top element: '${element}'`, 'info');
+            } catch (error) {
+                showStatus(`❌ ${error.message}`, 'error');
+            }
+        }
+
+        // Clear stack
+        function clearStack() {
+            demoStack.clear();
+            showStatus('🧹 Stack cleared', 'success');
+            updateVisual();
+        }
+
+        // Search element
+        function searchElement() {
+            const input = document.getElementById('elementInput');
+            const element = input.value.trim();
+            
+            if (!element) {
+                showStatus('Please enter an element to search', 'error');
+                return;
+            }
+
+            const position = demoStack.search(element);
+            if (position !== -1) {
+                showStatus(`🔍 Found '${element}' at position ${position} from top`, 'success');
+            } else {
+                showStatus(`❌ Element '${element}' not found in stack`, 'error');
+            }
+        }
+
+        // Handle Enter key in input
+        document.getElementById('elementInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                pushElement();
+            }
+        });
+
+        // Initialize visualization
+        updateVisual();
+    </script>
+</body>
+</html> 

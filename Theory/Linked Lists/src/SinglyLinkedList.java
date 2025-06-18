@@ -128,7 +128,9 @@ public class SinglyLinkedList {
             }
             current = current.next;
         }
-        
+        if(current.next == null){
+           return insertAtEnd(head, data);
+        }
         // Create new node and insert it
         SinglyNode newNode = new SinglyNode(data);
         newNode.next = current.next;
