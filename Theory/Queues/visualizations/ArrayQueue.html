@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array-Based Queue Visualization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #000000;
+            border-left: 4px solid #000000;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #333333;
+            margin-top: 25px;
+            font-size: 1.4em;
+        }
+
+        .intro {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .queue-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            min-height: 200px;
+        }
+
+        .queue-visual {
+            border: 3px solid #000000;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 0 20px;
+        }
+
+        .queue-array {
+            display: flex;
+            gap: 2px;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 2px solid #000000;
+            border-radius: 5px;
+        }
+
+        .array-cell {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #333333;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .array-cell.front {
+            background-color: #e8e8e8;
+            border-color: #000000;
+            border-width: 3px;
+        }
+
+        .array-cell.rear {
+            background-color: #f0f0f0;
+            border-color: #000000;
+            border-width: 3px;
+        }
+
+        .array-cell.front.rear {
+            background-color: #d8d8d8;
+            border-color: #000000;
+            border-width: 3px;
+        }
+
+        .array-cell.occupied {
+            background-color: #f9f9f9;
+            border-color: #333333;
+        }
+
+        .array-cell.empty {
+            background-color: #ffffff;
+            color: #999999;
+            border-style: dashed;
+            font-style: italic;
+        }
+
+        .pointer-label {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #000000;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+        }
+
+        .index-row {
+            display: flex;
+            gap: 2px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .index-cell {
+            width: 60px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666666;
+            font-weight: bold;
+        }
+
+        .interactive-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .control-panel {
+            margin: 20px 0;
+        }
+
+        .control-panel input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .control-panel button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-panel button:hover {
+            background-color: #f0f0f0;
+            border-color: #333333;
+        }
+
+        .control-panel button:disabled {
+            background-color: #e0e0e0;
+            border-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+        }
+
+        .info-panel {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            text-align: center;
+            margin: 5px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .info-value {
+            font-size: 1.2em;
+            color: #333333;
+        }
+
+        .operation-demo {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .log-container {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .log-success { 
+            background-color: #f0f0f0;
+            border-left: 3px solid #000000;
+        }
+        
+        .log-error { 
+            background-color: #f0f0f0;
+            border-left: 3px solid #666666;
+        }
+        
+        .log-info { 
+            background-color: #ffffff;
+            border-left: 3px solid #333333;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #333333;
+        }
+
+        .complexity-table th {
+            background-color: #f8f8f8;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .complexity-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .algorithm-info {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .circular-explanation {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .control-panel {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-panel button {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .array-cell {
+                width: 45px;
+                height: 45px;
+                font-size: 14px;
+            }
+            
+            .index-cell {
+                width: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Array-Based Queue Visualization</h1>
+
+        <div class="intro">
+            <p><strong>Array-Based Queue Implementation</strong> - Uses a circular array with front and rear pointers for efficient FIFO operations</p>
+        </div>
+
+        <div class="interactive-section">
+            <h2>Interactive Queue Operations</h2>
+            
+            <div class="control-panel">
+                <input type="number" id="enqueueValue" placeholder="Value" min="0" max="999" value="1">
+                <button onclick="enqueue()">Enqueue</button>
+                <button onclick="dequeue()">Dequeue</button>
+                <button onclick="front()">Front</button>
+                <button onclick="rear()">Rear</button>
+                <button onclick="clear()">Clear</button>
+                <button onclick="demo()">Demo</button>
+            </div>
+
+            <div class="circular-explanation">
+                <strong>Circular Array Logic:</strong> When front or rear pointers reach the end of the array, 
+                they wrap around to the beginning, creating a circular structure that efficiently utilizes space.
+            </div>
+
+            <div class="queue-container">
+                <div class="queue-visual">
+                    <div class="queue-label" style="text-align: center; font-weight: bold; margin-bottom: 10px;">Circular Array Structure</div>
+                    <div id="queueArray" class="queue-array">
+                        <!-- Array cells will be generated here -->
+                    </div>
+                    <div class="index-row" id="indexRow">
+                        <!-- Index labels will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-item">
+                <div class="info-label">Current Size</div>
+                <div class="info-value" id="sizeValue">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Capacity</div>
+                <div class="info-value" id="capacityValue">8</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Front Index</div>
+                <div class="info-value" id="frontIndex">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Rear Index</div>
+                <div class="info-value" id="rearIndex">-1</div>
+            </div>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-entry log-info">ArrayQueue initialized with capacity 8</div>
+            <div class="log-entry log-info">Try enqueuing and dequeuing elements to see the circular array in action!</div>
+        </div>
+
+        <div class="algorithm-info">
+            <h2>Time & Space Complexity Analysis</h2>
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Enqueue</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Constant time insertion at rear</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dequeue</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Constant time removal from front</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Front/Rear</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct access to elements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isEmpty/isFull</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Simple size comparison</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="operation-demo">
+                <h3>Key Advantages</h3>
+                <ul>
+                    <li><strong>Predictable Performance:</strong> All operations have constant time complexity</li>
+                    <li><strong>Memory Efficient:</strong> Fixed memory allocation with no dynamic resizing</li>
+                    <li><strong>Cache Friendly:</strong> Contiguous memory layout improves cache performance</li>
+                    <li><strong>No Memory Fragmentation:</strong> Single array allocation prevents heap fragmentation</li>
+                </ul>
+            </div>
+
+            <div class="operation-demo">
+                <h3>Best Use Cases</h3>
+                <ul>
+                    <li>Producer-consumer scenarios with known capacity limits</li>
+                    <li>Real-time systems requiring predictable performance</li>
+                    <li>Embedded systems with memory constraints</li>
+                    <li>High-performance applications where allocation overhead matters</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ArrayQueue {
+            constructor(capacity = 8) {
+                this.capacity = capacity;
+                this.queue = new Array(capacity).fill(null);
+                this.front = 0;
+                this.rear = -1;
+                this.size = 0;
+            }
+
+            enqueue(element) {
+                if (this.isFull()) {
+                    throw new Error("Queue overflow - cannot enqueue when full");
+                }
+                this.rear = (this.rear + 1) % this.capacity;
+                this.queue[this.rear] = element;
+                this.size++;
+                return true;
+            }
+
+            dequeue() {
+                if (this.isEmpty()) {
+                    throw new Error("Queue underflow - cannot dequeue when empty");
+                }
+                const element = this.queue[this.front];
+                this.queue[this.front] = null;
+                this.front = (this.front + 1) % this.capacity;
+                this.size--;
+                return element;
+            }
+
+            frontElement() {
+                if (this.isEmpty()) {
+                    throw new Error("Queue is empty");
+                }
+                return this.queue[this.front];
+            }
+
+            rearElement() {
+                if (this.isEmpty()) {
+                    throw new Error("Queue is empty");
+                }
+                return this.queue[this.rear];
+            }
+
+            isEmpty() {
+                return this.size === 0;
+            }
+
+            isFull() {
+                return this.size === this.capacity;
+            }
+
+            clear() {
+                this.queue.fill(null);
+                this.front = 0;
+                this.rear = -1;
+                this.size = 0;
+            }
+        }
+
+        // Global queue instance
+        let queue = new ArrayQueue(8);
+
+        // Initialize visualization
+        function initializeVisualization() {
+            updateDisplay();
+            logMessage("ArrayQueue initialized with capacity " + queue.capacity, "info");
+        }
+
+        // Update the visual display
+        function updateDisplay() {
+            const queueArray = document.getElementById('queueArray');
+            const indexRow = document.getElementById('indexRow');
+            
+            queueArray.innerHTML = '';
+            indexRow.innerHTML = '';
+
+            for (let i = 0; i < queue.capacity; i++) {
+                // Create array cell
+                const cell = document.createElement('div');
+                cell.className = 'array-cell';
+                cell.textContent = queue.queue[i] !== null ? queue.queue[i] : '';
+                
+                // Add styling based on position and content
+                if (queue.queue[i] !== null) {
+                    cell.classList.add('occupied');
+                } else {
+                    cell.classList.add('empty');
+                }
+
+                // Add pointer labels
+                if (!queue.isEmpty()) {
+                    if (i === queue.front && i === queue.rear) {
+                        cell.classList.add('front', 'rear');
+                        const label = document.createElement('div');
+                        label.className = 'pointer-label';
+                        label.textContent = 'F/R';
+                        cell.appendChild(label);
+                    } else if (i === queue.front) {
+                        cell.classList.add('front');
+                        const label = document.createElement('div');
+                        label.className = 'pointer-label';
+                        label.textContent = 'F';
+                        cell.appendChild(label);
+                    } else if (i === queue.rear) {
+                        cell.classList.add('rear');
+                        const label = document.createElement('div');
+                        label.className = 'pointer-label';
+                        label.textContent = 'R';
+                        cell.appendChild(label);
+                    }
+                }
+
+                queueArray.appendChild(cell);
+
+                // Create index cell
+                const indexCell = document.createElement('div');
+                indexCell.className = 'index-cell';
+                indexCell.textContent = i;
+                indexRow.appendChild(indexCell);
+            }
+
+            // Update status values
+            document.getElementById('sizeValue').textContent = queue.size;
+            document.getElementById('capacityValue').textContent = queue.capacity;
+            document.getElementById('frontIndex').textContent = queue.front;
+            document.getElementById('rearIndex').textContent = queue.rear;
+
+            // Update button states
+            document.querySelector('button[onclick="enqueue()"]').disabled = queue.isFull();
+            document.querySelector('button[onclick="dequeue()"]').disabled = queue.isEmpty();
+            document.querySelector('button[onclick="front()"]').disabled = queue.isEmpty();
+            document.querySelector('button[onclick="rear()"]').disabled = queue.isEmpty();
+        }
+
+        // Log messages to the console
+        function logMessage(message, type = "info") {
+            const logContainer = document.getElementById('logContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Queue operations
+        function enqueue() {
+            const input = document.getElementById('enqueueValue');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value)) {
+                logMessage("Please enter a valid number", "error");
+                return;
+            }
+
+            try {
+                queue.enqueue(value);
+                logMessage(`Enqueued ${value} at rear (index ${queue.rear})`, "success");
+                updateDisplay();
+                
+                // Auto-increment input value
+                input.value = value + 1;
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function dequeue() {
+            try {
+                const oldFront = queue.front;
+                const element = queue.dequeue();
+                logMessage(`Dequeued ${element} from front (index ${oldFront})`, "success");
+                updateDisplay();
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function front() {
+            try {
+                const element = queue.frontElement();
+                logMessage(`Front element: ${element} (index ${queue.front})`, "info");
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function rear() {
+            try {
+                const element = queue.rearElement();
+                logMessage(`Rear element: ${element} (index ${queue.rear})`, "info");
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function clear() {
+            queue.clear();
+            logMessage("Queue cleared - all elements removed", "info");
+            updateDisplay();
+        }
+
+        function demo() {
+            logMessage("Starting demonstration...", "info");
+            clear();
+            
+            const demoOperations = [
+                () => { document.getElementById('enqueueValue').value = 10; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 20; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 30; enqueue(); },
+                () => dequeue(),
+                () => { document.getElementById('enqueueValue').value = 40; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 50; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 60; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 70; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 80; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 90; enqueue(); },
+                () => dequeue(),
+                () => dequeue(),
+                () => { document.getElementById('enqueueValue').value = 100; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 110; enqueue(); }
+            ];
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < demoOperations.length) {
+                    demoOperations[index]();
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    logMessage("Demonstration complete! Notice how pointers wrap around.", "info");
+                }
+            }, 1500);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                enqueue();
+            } else if (event.key === 'Backspace') {
+                dequeue();
+            } else if (event.key === 'Escape') {
+                clear();
+            }
+        });
+
+        // Initialize on page load
+        window.onload = initializeVisualization;
+    </script>
+</body>
+</html> 

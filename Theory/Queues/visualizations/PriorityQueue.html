@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Queue Visualization - Binary Heap</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #000000;
+            border-left: 4px solid #000000;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #333333;
+            margin-top: 25px;
+            font-size: 1.4em;
+        }
+
+        .intro {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .heap-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 30px 0;
+            min-height: 300px;
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .heap-empty {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 200px;
+            color: #666666;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .heap-array {
+            display: flex;
+            gap: 2px;
+            background-color: #ffffff;
+            padding: 10px;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .heap-cell {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #333333;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .heap-cell.occupied {
+            background-color: #f9f9f9;
+            border-color: #000000;
+        }
+
+        .heap-cell.root {
+            background-color: #e8e8e8;
+            border-color: #000000;
+            border-width: 3px;
+        }
+
+        .heap-cell.empty {
+            background-color: #ffffff;
+            color: #999999;
+            border-style: dashed;
+            font-style: italic;
+        }
+
+        .heap-tree {
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .tree-node {
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .interactive-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .control-panel {
+            margin: 20px 0;
+        }
+
+        .control-panel input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .control-panel button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-panel button:hover {
+            background-color: #f0f0f0;
+            border-color: #333333;
+        }
+
+        .control-panel button:disabled {
+            background-color: #e0e0e0;
+            border-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+        }
+
+        .control-panel select {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #ffffff;
+        }
+
+        .info-panel {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            text-align: center;
+            margin: 5px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .info-value {
+            font-size: 1.2em;
+            color: #333333;
+        }
+
+        .operation-demo {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .log-container {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .log-success { 
+            background-color: #f0f0f0;
+            border-left: 3px solid #000000;
+        }
+        
+        .log-error { 
+            background-color: #f0f0f0;
+            border-left: 3px solid #666666;
+        }
+        
+        .log-info { 
+            background-color: #ffffff;
+            border-left: 3px solid #333333;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #333333;
+        }
+
+        .complexity-table th {
+            background-color: #f8f8f8;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .complexity-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .algorithm-info {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .heap-explanation {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .index-row {
+            display: flex;
+            gap: 2px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .index-cell {
+            width: 50px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666666;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .control-panel {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-panel button {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .heap-cell {
+                width: 40px;
+                height: 40px;
+                font-size: 12px;
+            }
+            
+            .index-cell {
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Priority Queue Visualization - Binary Heap</h1>
+
+        <div class="intro">
+            <p><strong>Priority Queue Implementation</strong> - Uses a binary heap to maintain element priority order</p>
+        </div>
+
+        <div class="interactive-section">
+            <h2>Interactive Priority Queue Operations</h2>
+            
+            <div class="control-panel">
+                <select id="heapType" onchange="changeHeapType()">
+                    <option value="min">Min-Heap (Smaller = Higher Priority)</option>
+                    <option value="max">Max-Heap (Larger = Higher Priority)</option>
+                </select>
+                <input type="number" id="enqueueValue" placeholder="Value" min="0" max="999" value="1">
+                <button onclick="enqueue()">Enqueue</button>
+                <button onclick="dequeue()">Dequeue</button>
+                <button onclick="peek()">Peek</button>
+                <button onclick="clear()">Clear</button>
+                <button onclick="demo()">Demo</button>
+            </div>
+
+            <div class="heap-explanation">
+                <strong>Binary Heap Properties:</strong> 
+                <span id="heapTypeDescription">Min-Heap: Each parent node has a value less than or equal to its children. The root contains the minimum element.</span>
+            </div>
+
+            <div class="heap-container" id="heapContainer">
+                <div class="heap-empty" id="emptyMessage">
+                    Priority queue is empty - add elements to see the heap structure!
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-item">
+                <div class="info-label">Current Size</div>
+                <div class="info-value" id="sizeValue">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Heap Type</div>
+                <div class="info-value" id="heapTypeValue">Min-Heap</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Root Element</div>
+                <div class="info-value" id="rootValue">null</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Capacity</div>
+                <div class="info-value" id="capacityValue">10</div>
+            </div>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-entry log-info">PriorityQueue initialized as Min-Heap</div>
+            <div class="log-entry log-info">Try enqueuing elements to see the heap maintain priority order!</div>
+        </div>
+
+        <div class="algorithm-info">
+            <h2>Time & Space Complexity Analysis</h2>
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Enqueue (Insert)</strong></td>
+                        <td>O(log n)</td>
+                        <td>O(1)</td>
+                        <td>Insert element and heapify up</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dequeue (Extract)</strong></td>
+                        <td>O(log n)</td>
+                        <td>O(1)</td>
+                        <td>Remove root and heapify down</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Peek</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct access to root element</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Build Heap</strong></td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                        <td>Heapify entire array</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="operation-demo">
+                <h3>Key Advantages</h3>
+                <ul>
+                    <li><strong>Efficient Priority Operations:</strong> Logarithmic time for insertion and extraction</li>
+                    <li><strong>Space Efficient:</strong> Complete binary tree stored in array</li>
+                    <li><strong>Dynamic Size:</strong> Can grow and shrink as needed</li>
+                    <li><strong>Versatile:</strong> Supports both min-heap and max-heap operations</li>
+                </ul>
+            </div>
+
+            <div class="operation-demo">
+                <h3>Common Use Cases</h3>
+                <ul>
+                    <li>Task scheduling systems with priority levels</li>
+                    <li>Dijkstra's shortest path algorithm</li>
+                    <li>Huffman coding for data compression</li>
+                    <li>Operating system process scheduling</li>
+                    <li>A* pathfinding algorithm</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class PriorityQueue {
+            constructor(isMinHeap = true) {
+                this.heap = [];
+                this.isMinHeap = isMinHeap;
+            }
+
+            enqueue(element) {
+                this.heap.push(element);
+                this.heapifyUp(this.heap.length - 1);
+            }
+
+            dequeue() {
+                if (this.isEmpty()) {
+                    throw new Error("Priority queue is empty");
+                }
+                if (this.heap.length === 1) {
+                    return this.heap.pop();
+                }
+                
+                const root = this.heap[0];
+                this.heap[0] = this.heap.pop();
+                this.heapifyDown(0);
+                return root;
+            }
+
+            peek() {
+                if (this.isEmpty()) {
+                    throw new Error("Priority queue is empty");
+                }
+                return this.heap[0];
+            }
+
+            isEmpty() {
+                return this.heap.length === 0;
+            }
+
+            size() {
+                return this.heap.length;
+            }
+
+            clear() {
+                this.heap = [];
+            }
+
+            heapifyUp(index) {
+                if (index === 0) return;
+                
+                const parentIndex = Math.floor((index - 1) / 2);
+                const shouldSwap = this.isMinHeap 
+                    ? this.heap[index] < this.heap[parentIndex]
+                    : this.heap[index] > this.heap[parentIndex];
+                
+                if (shouldSwap) {
+                    this.swap(index, parentIndex);
+                    this.heapifyUp(parentIndex);
+                }
+            }
+
+            heapifyDown(index) {
+                const leftChild = 2 * index + 1;
+                const rightChild = 2 * index + 2;
+                let targetIndex = index;
+
+                if (leftChild < this.heap.length) {
+                    const shouldSwap = this.isMinHeap 
+                        ? this.heap[leftChild] < this.heap[targetIndex]
+                        : this.heap[leftChild] > this.heap[targetIndex];
+                    if (shouldSwap) {
+                        targetIndex = leftChild;
+                    }
+                }
+
+                if (rightChild < this.heap.length) {
+                    const shouldSwap = this.isMinHeap 
+                        ? this.heap[rightChild] < this.heap[targetIndex]
+                        : this.heap[rightChild] > this.heap[targetIndex];
+                    if (shouldSwap) {
+                        targetIndex = rightChild;
+                    }
+                }
+
+                if (targetIndex !== index) {
+                    this.swap(index, targetIndex);
+                    this.heapifyDown(targetIndex);
+                }
+            }
+
+            swap(i, j) {
+                [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+            }
+        }
+
+        // Global priority queue instance
+        let pq = new PriorityQueue(true);
+
+        // Initialize visualization
+        function initializeVisualization() {
+            updateDisplay();
+            logMessage("PriorityQueue initialized as Min-Heap", "info");
+        }
+
+        // Update the visual display
+        function updateDisplay() {
+            const heapContainer = document.getElementById('heapContainer');
+            const emptyMessage = document.getElementById('emptyMessage');
+            
+            if (pq.isEmpty()) {
+                heapContainer.innerHTML = '';
+                heapContainer.appendChild(emptyMessage);
+            } else {
+                heapContainer.innerHTML = '';
+                
+                // Create array representation
+                const arrayContainer = document.createElement('div');
+                arrayContainer.style.textAlign = 'center';
+                
+                const arrayTitle = document.createElement('div');
+                arrayTitle.textContent = 'Array Representation';
+                arrayTitle.style.fontWeight = 'bold';
+                arrayTitle.style.marginBottom = '10px';
+                arrayContainer.appendChild(arrayTitle);
+                
+                const heapArray = document.createElement('div');
+                heapArray.className = 'heap-array';
+                
+                // Add heap elements
+                const maxDisplay = Math.min(pq.heap.length, 15); // Limit display to avoid overflow
+                for (let i = 0; i < maxDisplay; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'heap-cell occupied';
+                    if (i === 0) cell.classList.add('root');
+                    cell.textContent = pq.heap[i];
+                    heapArray.appendChild(cell);
+                }
+                
+                if (pq.heap.length > 15) {
+                    const moreCell = document.createElement('div');
+                    moreCell.className = 'heap-cell';
+                    moreCell.textContent = '...';
+                    moreCell.style.border = 'none';
+                    moreCell.style.color = '#666666';
+                    heapArray.appendChild(moreCell);
+                }
+                
+                arrayContainer.appendChild(heapArray);
+                
+                // Add index row
+                const indexRow = document.createElement('div');
+                indexRow.className = 'index-row';
+                for (let i = 0; i < Math.min(maxDisplay, 15); i++) {
+                    const indexCell = document.createElement('div');
+                    indexCell.className = 'index-cell';
+                    indexCell.textContent = i;
+                    indexRow.appendChild(indexCell);
+                }
+                arrayContainer.appendChild(indexRow);
+                
+                heapContainer.appendChild(arrayContainer);
+                
+                // Create tree representation
+                if (pq.heap.length <= 15) { // Only show tree for smaller heaps
+                    const treeContainer = document.createElement('div');
+                    treeContainer.className = 'heap-tree';
+                    
+                    const treeTitle = document.createElement('div');
+                    treeTitle.textContent = 'Tree Structure';
+                    treeTitle.style.fontWeight = 'bold';
+                    treeTitle.style.marginBottom = '10px';
+                    treeTitle.style.textAlign = 'center';
+                    treeContainer.appendChild(treeTitle);
+                    
+                    const treeDiv = document.createElement('div');
+                    treeDiv.innerHTML = buildTreeString(0, '', true);
+                    treeContainer.appendChild(treeDiv);
+                    
+                    heapContainer.appendChild(treeContainer);
+                }
+            }
+
+            // Update status values
+            document.getElementById('sizeValue').textContent = pq.size();
+            document.getElementById('heapTypeValue').textContent = pq.isMinHeap ? 'Min-Heap' : 'Max-Heap';
+            document.getElementById('rootValue').textContent = pq.isEmpty() ? 'null' : pq.heap[0];
+            document.getElementById('capacityValue').textContent = pq.heap.length;
+
+            // Update button states
+            const isEmpty = pq.isEmpty();
+            document.querySelector('button[onclick="dequeue()"]').disabled = isEmpty;
+            document.querySelector('button[onclick="peek()"]').disabled = isEmpty;
+        }
+
+        // Build tree string representation
+        function buildTreeString(index, prefix, isLast) {
+            if (index >= pq.heap.length) return '';
+            
+            let result = prefix + (isLast ? "└── " : "├── ") + pq.heap[index] + '\n';
+            
+            const leftChild = 2 * index + 1;
+            const rightChild = 2 * index + 2;
+            
+            if (leftChild < pq.heap.length) {
+                result += buildTreeString(leftChild, prefix + (isLast ? "    " : "│   "), rightChild >= pq.heap.length);
+            }
+            if (rightChild < pq.heap.length) {
+                result += buildTreeString(rightChild, prefix + (isLast ? "    " : "│   "), true);
+            }
+            
+            return result;
+        }
+
+        // Log messages to the console
+        function logMessage(message, type = "info") {
+            const logContainer = document.getElementById('logContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Priority queue operations
+        function enqueue() {
+            const input = document.getElementById('enqueueValue');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value)) {
+                logMessage("Please enter a valid number", "error");
+                return;
+            }
+
+            pq.enqueue(value);
+            const heapType = pq.isMinHeap ? "min-heap" : "max-heap";
+            logMessage(`Enqueued ${value} to ${heapType}`, "success");
+            updateDisplay();
+            
+            // Auto-increment input value
+            input.value = value + 1;
+        }
+
+        function dequeue() {
+            try {
+                const element = pq.dequeue();
+                const heapType = pq.isMinHeap ? "min-heap" : "max-heap";
+                logMessage(`Dequeued ${element} from ${heapType} (highest priority)`, "success");
+                updateDisplay();
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function peek() {
+            try {
+                const element = pq.peek();
+                logMessage(`Highest priority element: ${element}`, "info");
+            } catch (error) {
+                logMessage(`${error.message}`, "error");
+            }
+        }
+
+        function clear() {
+            pq.clear();
+            logMessage("Priority queue cleared - all elements removed", "info");
+            updateDisplay();
+        }
+
+        function changeHeapType() {
+            const heapTypeSelect = document.getElementById('heapType');
+            const newIsMinHeap = heapTypeSelect.value === 'min';
+            
+            if (newIsMinHeap !== pq.isMinHeap) {
+                const oldElements = [...pq.heap];
+                pq = new PriorityQueue(newIsMinHeap);
+                
+                // Re-insert all elements to maintain new heap property
+                oldElements.forEach(element => pq.enqueue(element));
+                
+                const heapType = newIsMinHeap ? "min-heap" : "max-heap";
+                logMessage(`Changed to ${heapType} and rebuilt heap`, "info");
+                
+                // Update heap type description
+                const description = newIsMinHeap 
+                    ? "Min-Heap: Each parent node has a value less than or equal to its children. The root contains the minimum element."
+                    : "Max-Heap: Each parent node has a value greater than or equal to its children. The root contains the maximum element.";
+                document.getElementById('heapTypeDescription').textContent = description;
+                
+                updateDisplay();
+            }
+        }
+
+        function demo() {
+            logMessage("Starting Priority Queue demonstration...", "info");
+            clear();
+            
+            const demoOperations = [
+                () => { document.getElementById('enqueueValue').value = 50; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 30; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 70; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 10; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 40; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 60; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 80; enqueue(); },
+                () => dequeue(),
+                () => dequeue(),
+                () => { document.getElementById('enqueueValue').value = 5; enqueue(); },
+                () => { document.getElementById('enqueueValue').value = 25; enqueue(); }
+            ];
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < demoOperations.length) {
+                    demoOperations[index]();
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    logMessage("Demonstration complete! Notice how the heap maintains priority order.", "info");
+                }
+            }, 1500);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                enqueue();
+            } else if (event.key === 'Backspace') {
+                dequeue();
+            } else if (event.key === 'Escape') {
+                clear();
+            }
+        });
+
+        // Initialize on page load
+        window.onload = initializeVisualization;
+    </script>
+</body>
+</html> 
