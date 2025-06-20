@@ -43,18 +43,18 @@ Use binary exponentiation (exponentiation by squaring) to achieve O(log n) time 
 // Language: Java
 public static double myPow(double x, int n) {
     double ans = 1.0;
-    long num = n;
-    if(num < 0){
-        num = num * -1;
+    long exp = n;
+    if(exp < 0){
+        exp = exp * -1;
     }
-    while(num > 0){
-        if(num % 2 == 0){
+    while(exp > 0){
+        if(exp % 2 == 0){
             x = x * x;
-            num /= 2;
+            exp /= 2;
         }
         else{
             ans *= x;
-            num = num - 1;
+            exp = exp - 1;
         }
     }
     if(n < 0){

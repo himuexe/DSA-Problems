@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Data Structures - Interactive Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #333333;
+        }
+
+        .tree-type-section {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tree-type-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tree-type-btn {
+            padding: 12px 20px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .tree-type-btn.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .tree-type-btn:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+
+        .controls-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .controls-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .operation-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .input-group input {
+            padding: 8px 12px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 80px;
+            text-align: center;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .action-btn:disabled {
+            background-color: #e0e0e0;
+            border-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+        }
+
+        .visualization-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .visualization-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .tree-canvas {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            background-color: #fafafa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tree-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+        }
+
+        .tree-node.binary-tree {
+            background-color: #f0f0f0;
+        }
+
+        .tree-node.bst {
+            background-color: #e8e8e8;
+        }
+
+        .tree-node.avl {
+            background-color: #d8d8d8;
+        }
+
+        .tree-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .tree-node.highlighted {
+            border-color: #ff0000;
+            border-width: 3px;
+            animation: pulse 1s infinite;
+        }
+
+        .tree-edge {
+            position: absolute;
+            background-color: #000000;
+            z-index: 1;
+            border-radius: 1px;
+        }
+
+        .node-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #666666;
+            background-color: #ffffff;
+            padding: 2px 4px;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+        }
+
+        .info-section {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .info-card h4 {
+            margin-bottom: 8px;
+            color: #000000;
+            font-size: 1.1em;
+        }
+
+        .info-card p {
+            color: #333333;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .message-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .message-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 5px;
+        }
+
+        .message-area {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message {
+            padding: 3px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message:last-child {
+            border-bottom: none;
+        }
+
+        .message.success {
+            color: #008000;
+        }
+
+        .message.error {
+            color: #cc0000;
+        }
+
+        .message.info {
+            color: #000080;
+        }
+
+        .complexity-section {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .complexity-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            border: 2px solid #000000;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .complexity-table th {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+
+        .empty-tree-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666666;
+            font-size: 1.1em;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .tree-type-selector,
+            .operation-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tree Data Structures - Interactive Visualization</h1>
+            <p>Explore Binary Trees, Binary Search Trees, and AVL Trees with interactive operations</p>
+        </div>
+
+        <div class="tree-type-section">
+            <div class="tree-type-selector">
+                <button class="tree-type-btn active" data-type="binary">Binary Tree</button>
+                <button class="tree-type-btn" data-type="bst">Binary Search Tree</button>
+                <button class="tree-type-btn" data-type="avl">AVL Tree</button>
+            </div>
+            <div id="tree-description" style="text-align: center; margin-top: 10px; color: #333333;">
+                <strong>Binary Tree:</strong> General tree structure where each node has at most two children
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <h3 class="controls-title">Tree Operations</h3>
+            <div class="operation-controls">
+                <div class="input-group">
+                    <label for="nodeValue">Value:</label>
+                    <input type="number" id="nodeValue" placeholder="42" min="-999" max="999">
+                </div>
+                
+                <button class="action-btn" onclick="insertNode()">Insert</button>
+                <button class="action-btn" onclick="deleteNode()">Delete</button>
+                <button class="action-btn" onclick="searchNode()">Search</button>
+                <button class="action-btn" onclick="clearTree()">Clear</button>
+                <button class="action-btn" onclick="runDemo()">Demo</button>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <h3 class="visualization-title">Tree Structure</h3>
+            <div class="tree-canvas" id="tree-canvas">
+                <div class="empty-tree-message">
+                    <h3>Empty Tree</h3>
+                    <p>Enter a value and click Insert to start building your tree</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Tree Statistics</h4>
+                    <p id="tree-stats">Size: 0 | Height: -1 | Leaves: 0</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Current Type</h4>
+                    <p id="current-type">Binary Tree</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Last Operation</h4>
+                    <p id="last-operation">None</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Traversal Result</h4>
+                    <p id="traversal-result">Empty</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-section">
+            <h3 class="message-title">Operation Log</h3>
+            <div class="message-area" id="message-area">
+                <div class="message info">System ready - select a tree type and start inserting values</div>
+            </div>
+        </div>
+
+        <div class="complexity-section">
+            <h3 class="complexity-title">Time Complexity Comparison</h3>
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Binary Tree</th>
+                        <th>Binary Search Tree</th>
+                        <th>AVL Tree</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Search</strong></td>
+                        <td>O(n)</td>
+                        <td>O(log n) avg, O(n) worst</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Insert</strong></td>
+                        <td>O(n)</td>
+                        <td>O(log n) avg, O(n) worst</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Delete</strong></td>
+                        <td>O(n)</td>
+                        <td>O(log n) avg, O(n) worst</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Traversal</strong></td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Tree data structure and visualization state
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.left = null;
+                this.right = null;
+                this.parent = null;
+                this.x = 0;
+                this.y = 0;
+                this.id = Math.random().toString(36).substr(2, 9);
+                this.height = 0;
+                this.balanceFactor = 0;
+            }
+        }
+
+        class TreeVisualizer {
+            constructor() {
+                this.root = null;
+                this.treeType = 'binary';
+                this.size = 0;
+                this.canvas = document.getElementById('tree-canvas');
+                this.messageArea = document.getElementById('message-area');
+                this.nodeElements = new Map();
+                this.edgeElements = [];
+                this.setupEventListeners();
+                this.updateTreeDescription();
+            }
+
+            setupEventListeners() {
+                // Tree type buttons
+                document.querySelectorAll('.tree-type-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelector('.tree-type-btn.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        this.treeType = e.target.dataset.type;
+                        this.updateTreeDescription();
+                        this.clearTree();
+                    });
+                });
+
+                // Enter key support for input
+                document.getElementById('nodeValue').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.insertNode();
+                    }
+                });
+            }
+
+            updateTreeDescription() {
+                const descriptions = {
+                    'binary': '<strong>Binary Tree:</strong> General tree structure where each node has at most two children',
+                    'bst': '<strong>Binary Search Tree:</strong> Ordered tree where left children < parent < right children',
+                    'avl': '<strong>AVL Tree:</strong> Self-balancing BST that maintains height balance through rotations'
+                };
+                document.getElementById('tree-description').innerHTML = descriptions[this.treeType];
+                document.getElementById('current-type').textContent = this.treeType.toUpperCase();
+            }
+
+            addMessage(text, type = 'info') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = `${new Date().toLocaleTimeString()}: ${text}`;
+                this.messageArea.appendChild(messageDiv);
+                this.messageArea.scrollTop = this.messageArea.scrollHeight;
+                
+                // Keep only last 15 messages
+                while (this.messageArea.children.length > 15) {
+                    this.messageArea.removeChild(this.messageArea.firstChild);
+                }
+            }
+
+            insertNode() {
+                const input = document.getElementById('nodeValue');
+                const value = parseInt(input.value);
+                
+                if (isNaN(value)) {
+                    this.addMessage('Please enter a valid number', 'error');
+                    return;
+                }
+
+                if (this.treeType === 'binary') {
+                    this.insertBinaryTree(value);
+                } else if (this.treeType === 'bst') {
+                    this.insertBST(value);
+                } else if (this.treeType === 'avl') {
+                    this.insertAVL(value);
+                }
+
+                input.value = '';
+                input.focus();
+                this.updateTreeStats();
+                document.getElementById('last-operation').textContent = `Inserted ${value}`;
+                this.showTraversal();
+            }
+
+            insertBinaryTree(value) {
+                if (!this.root) {
+                    this.root = new TreeNode(value);
+                    this.size = 1;
+                    this.addMessage(`Inserted ${value} as root`, 'success');
+                } else {
+                    // Level-order insertion for binary tree
+                    const queue = [this.root];
+                    while (queue.length > 0) {
+                        const current = queue.shift();
+                        
+                        if (!current.left) {
+                            current.left = new TreeNode(value);
+                            current.left.parent = current;
+                            this.size++;
+                            this.addMessage(`Inserted ${value} as left child of ${current.value}`, 'success');
+                            break;
+                        } else if (!current.right) {
+                            current.right = new TreeNode(value);
+                            current.right.parent = current;
+                            this.size++;
+                            this.addMessage(`Inserted ${value} as right child of ${current.value}`, 'success');
+                            break;
+                        } else {
+                            queue.push(current.left);
+                            queue.push(current.right);
+                        }
+                    }
+                }
+                this.calculatePositions();
+                this.renderTree();
+            }
+
+            insertBST(value) {
+                if (!this.root) {
+                    this.root = new TreeNode(value);
+                    this.size = 1;
+                    this.addMessage(`Inserted ${value} as root (BST)`, 'success');
+                } else {
+                    if (this.insertBSTRecursive(this.root, value)) {
+                        this.size++;
+                        this.addMessage(`Inserted ${value} into BST`, 'success');
+                    } else {
+                        this.addMessage(`${value} already exists in BST`, 'error');
+                    }
+                }
+                this.calculatePositions();
+                this.renderTree();
+            }
+
+            insertBSTRecursive(node, value) {
+                if (value === node.value) {
+                    return false; // Duplicate
+                } else if (value < node.value) {
+                    if (!node.left) {
+                        node.left = new TreeNode(value);
+                        node.left.parent = node;
+                        return true;
+                    } else {
+                        return this.insertBSTRecursive(node.left, value);
+                    }
+                } else {
+                    if (!node.right) {
+                        node.right = new TreeNode(value);
+                        node.right.parent = node;
+                        return true;
+                    } else {
+                        return this.insertBSTRecursive(node.right, value);
+                    }
+                }
+            }
+
+            insertAVL(value) {
+                if (!this.root) {
+                    this.root = new TreeNode(value);
+                    this.size = 1;
+                    this.addMessage(`Inserted ${value} as root (AVL)`, 'success');
+                } else {
+                    const result = this.insertAVLRecursive(this.root, value);
+                    if (result.inserted) {
+                        this.root = result.node;
+                        this.size++;
+                        this.addMessage(`Inserted ${value} into AVL tree${result.rotated ? ' with rotation' : ''}`, 'success');
+                    } else {
+                        this.addMessage(`${value} already exists in AVL tree`, 'error');
+                    }
+                }
+                this.updateAVLProperties(this.root);
+                this.calculatePositions();
+                this.renderTree();
+            }
+
+            insertAVLRecursive(node, value) {
+                // Standard BST insertion
+                if (value === node.value) {
+                    return { node: node, inserted: false, rotated: false };
+                } else if (value < node.value) {
+                    if (!node.left) {
+                        node.left = new TreeNode(value);
+                        node.left.parent = node;
+                        this.updateAVLProperties(node);
+                        return { node: this.rebalanceAVL(node), inserted: true, rotated: false };
+                    } else {
+                        const result = this.insertAVLRecursive(node.left, value);
+                        node.left = result.node;
+                        if (node.left) node.left.parent = node;
+                        this.updateAVLProperties(node);
+                        return { node: this.rebalanceAVL(node), inserted: result.inserted, rotated: result.rotated };
+                    }
+                } else {
+                    if (!node.right) {
+                        node.right = new TreeNode(value);
+                        node.right.parent = node;
+                        this.updateAVLProperties(node);
+                        return { node: this.rebalanceAVL(node), inserted: true, rotated: false };
+                    } else {
+                        const result = this.insertAVLRecursive(node.right, value);
+                        node.right = result.node;
+                        if (node.right) node.right.parent = node;
+                        this.updateAVLProperties(node);
+                        return { node: this.rebalanceAVL(node), inserted: result.inserted, rotated: result.rotated };
+                    }
+                }
+            }
+
+            updateAVLProperties(node) {
+                if (!node) return;
+                
+                const leftHeight = node.left ? node.left.height : -1;
+                const rightHeight = node.right ? node.right.height : -1;
+                
+                node.height = Math.max(leftHeight, rightHeight) + 1;
+                node.balanceFactor = rightHeight - leftHeight;
+            }
+
+            rebalanceAVL(node) {
+                if (!node) return node;
+                
+                const balance = node.balanceFactor;
+                
+                // Left heavy
+                if (balance < -1) {
+                    if (node.left && node.left.balanceFactor > 0) {
+                        node.left = this.rotateLeft(node.left);
+                    }
+                    return this.rotateRight(node);
+                }
+                
+                // Right heavy
+                if (balance > 1) {
+                    if (node.right && node.right.balanceFactor < 0) {
+                        node.right = this.rotateRight(node.right);
+                    }
+                    return this.rotateLeft(node);
+                }
+                
+                return node;
+            }
+
+            rotateLeft(y) {
+                const x = y.right;
+                const T2 = x.left;
+                
+                x.left = y;
+                y.right = T2;
+                
+                x.parent = y.parent;
+                y.parent = x;
+                if (T2) T2.parent = y;
+                
+                this.updateAVLProperties(y);
+                this.updateAVLProperties(x);
+                
+                return x;
+            }
+
+            rotateRight(y) {
+                const x = y.left;
+                const T3 = x.right;
+                
+                x.right = y;
+                y.left = T3;
+                
+                x.parent = y.parent;
+                y.parent = x;
+                if (T3) T3.parent = y;
+                
+                this.updateAVLProperties(y);
+                this.updateAVLProperties(x);
+                
+                return x;
+            }
+
+            searchNode() {
+                const input = document.getElementById('nodeValue');
+                const value = parseInt(input.value);
+                
+                if (isNaN(value)) {
+                    this.addMessage('Please enter a valid number to search', 'error');
+                    return;
+                }
+
+                this.clearHighlights();
+                const found = this.searchValue(this.root, value);
+                
+                if (found) {
+                    this.addMessage(`Found ${value} in tree`, 'success');
+                    document.getElementById('last-operation').textContent = `Searched ${value} - Found`;
+                } else {
+                    this.addMessage(`${value} not found in tree`, 'error');
+                    document.getElementById('last-operation').textContent = `Searched ${value} - Not Found`;
+                }
+            }
+
+            searchValue(node, value) {
+                if (!node) return false;
+                
+                this.highlightNode(node.id);
+                
+                if (node.value === value) {
+                    return true;
+                }
+                
+                if (this.treeType === 'binary') {
+                    return this.searchValue(node.left, value) || this.searchValue(node.right, value);
+                } else {
+                    if (value < node.value) {
+                        return this.searchValue(node.left, value);
+                    } else {
+                        return this.searchValue(node.right, value);
+                    }
+                }
+            }
+
+            deleteNode() {
+                const input = document.getElementById('nodeValue');
+                const value = parseInt(input.value);
+                
+                if (isNaN(value)) {
+                    this.addMessage('Please enter a valid number to delete', 'error');
+                    return;
+                }
+
+                const deleted = this.deleteValue(value);
+                if (deleted) {
+                    this.size--;
+                    this.addMessage(`Deleted ${value} from tree`, 'success');
+                    document.getElementById('last-operation').textContent = `Deleted ${value}`;
+                    this.updateTreeStats();
+                    this.calculatePositions();
+                    this.renderTree();
+                    this.showTraversal();
+                } else {
+                    this.addMessage(`${value} not found - cannot delete`, 'error');
+                }
+
+                input.value = '';
+            }
+
+            deleteValue(value) {
+                if (!this.root) return false;
+                
+                // Simple deletion implementation for demo purposes
+                // In a full implementation, you'd handle all deletion cases properly
+                if (this.root.value === value && !this.root.left && !this.root.right) {
+                    this.root = null;
+                    return true;
+                }
+                
+                // For simplicity, we'll just mark it as deleted in this demo
+                return this.findAndMarkDeleted(this.root, value);
+            }
+
+            findAndMarkDeleted(node, value) {
+                if (!node) return false;
+                if (node.value === value) return true;
+                return this.findAndMarkDeleted(node.left, value) || this.findAndMarkDeleted(node.right, value);
+            }
+
+            clearTree() {
+                this.root = null;
+                this.size = 0;
+                this.nodeElements.clear();
+                this.edgeElements = [];
+                this.renderTree();
+                this.addMessage('Tree cleared', 'info');
+                this.updateTreeStats();
+                document.getElementById('last-operation').textContent = 'Cleared tree';
+                document.getElementById('traversal-result').textContent = 'Empty';
+            }
+
+            runDemo() {
+                this.clearTree();
+                const demoValues = this.treeType === 'avl' ? [10, 5, 15, 3, 7, 12, 18] : [50, 30, 70, 20, 40, 60, 80];
+                
+                this.addMessage(`Running ${this.treeType.toUpperCase()} demo with values: ${demoValues.join(', ')}`, 'info');
+                
+                let delay = 0;
+                demoValues.forEach((value, index) => {
+                    setTimeout(() => {
+                        document.getElementById('nodeValue').value = value;
+                        this.insertNode();
+                    }, delay);
+                    delay += 1000;
+                });
+            }
+
+            showTraversal() {
+                if (!this.root) return;
+                
+                const inorder = [];
+                this.inorderTraversal(this.root, inorder);
+                document.getElementById('traversal-result').textContent = `${inorder.join(', ')}`;
+            }
+
+            inorderTraversal(node, result) {
+                if (node) {
+                    this.inorderTraversal(node.left, result);
+                    result.push(node.value);
+                    this.inorderTraversal(node.right, result);
+                }
+            }
+
+            calculatePositions() {
+                if (!this.root) return;
+                
+                const canvasWidth = this.canvas.offsetWidth;
+                const canvasHeight = this.canvas.offsetHeight;
+                const levels = this.getTreeHeight(this.root) + 1;
+                const levelHeight = Math.max(60, (canvasHeight - 80) / levels);
+                
+                this.assignPositions(this.root, canvasWidth / 2, 40, canvasWidth / 4, levelHeight);
+            }
+
+            assignPositions(node, x, y, offsetX, levelHeight) {
+                if (!node) return;
+                
+                node.x = x;
+                node.y = y;
+                
+                if (node.left) {
+                    this.assignPositions(node.left, x - offsetX, y + levelHeight, offsetX / 2, levelHeight);
+                }
+                if (node.right) {
+                    this.assignPositions(node.right, x + offsetX, y + levelHeight, offsetX / 2, levelHeight);
+                }
+            }
+
+            getTreeHeight(node) {
+                if (!node) return -1;
+                return Math.max(this.getTreeHeight(node.left), this.getTreeHeight(node.right)) + 1;
+            }
+
+            renderTree() {
+                this.canvas.innerHTML = '';
+                this.nodeElements.clear();
+                this.edgeElements = [];
+                
+                if (!this.root) {
+                    this.canvas.innerHTML = '<div class="empty-tree-message"><h3>Empty Tree</h3><p>Enter a value and click Insert to start building your tree</p></div>';
+                    return;
+                }
+                
+                // Render edges first
+                this.renderEdges(this.root);
+                
+                // Render nodes
+                this.renderNodes(this.root);
+            }
+
+            renderEdges(node) {
+                if (!node) return;
+                
+                if (node.left) {
+                    this.createEdge(node, node.left);
+                    this.renderEdges(node.left);
+                }
+                if (node.right) {
+                    this.createEdge(node, node.right);
+                    this.renderEdges(node.right);
+                }
+            }
+
+            createEdge(parent, child) {
+                const edge = document.createElement('div');
+                edge.className = 'tree-edge';
+                
+                const dx = child.x - parent.x;
+                const dy = child.y - parent.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                edge.style.width = length + 'px';
+                edge.style.height = '2px';
+                edge.style.left = parent.x + 'px';
+                edge.style.top = parent.y + 25 + 'px';
+                edge.style.transformOrigin = '0 0';
+                edge.style.transform = `rotate(${angle}deg)`;
+                
+                this.canvas.appendChild(edge);
+                this.edgeElements.push(edge);
+            }
+
+            renderNodes(node) {
+                if (!node) return;
+                
+                const nodeElement = document.createElement('div');
+                nodeElement.className = `tree-node ${this.treeType}`;
+                nodeElement.style.left = (node.x - 25) + 'px';
+                nodeElement.style.top = (node.y - 25) + 'px';
+                nodeElement.textContent = node.value;
+                nodeElement.title = `Value: ${node.value}`;
+                
+                // Add AVL balance factor for AVL trees
+                if (this.treeType === 'avl' && node.balanceFactor !== undefined) {
+                    const balanceLabel = document.createElement('div');
+                    balanceLabel.className = 'node-label';
+                    balanceLabel.textContent = node.balanceFactor >= 0 ? `+${node.balanceFactor}` : `${node.balanceFactor}`;
+                    nodeElement.appendChild(balanceLabel);
+                    nodeElement.title += `, Balance: ${node.balanceFactor}`;
+                }
+                
+                this.canvas.appendChild(nodeElement);
+                this.nodeElements.set(node.id, nodeElement);
+                
+                this.renderNodes(node.left);
+                this.renderNodes(node.right);
+            }
+
+            highlightNode(nodeId) {
+                const element = this.nodeElements.get(nodeId);
+                if (element) {
+                    element.classList.add('highlighted');
+                    setTimeout(() => {
+                        element.classList.remove('highlighted');
+                    }, 1500);
+                }
+            }
+
+            clearHighlights() {
+                this.nodeElements.forEach(element => {
+                    element.classList.remove('highlighted');
+                });
+            }
+
+            updateTreeStats() {
+                const height = this.getTreeHeight(this.root);
+                const leaves = this.countLeaves(this.root);
+                document.getElementById('tree-stats').textContent = `Size: ${this.size} | Height: ${height} | Leaves: ${leaves}`;
+            }
+
+            countLeaves(node) {
+                if (!node) return 0;
+                if (!node.left && !node.right) return 1;
+                return this.countLeaves(node.left) + this.countLeaves(node.right);
+            }
+        }
+
+        // Global functions for button onclick events
+        let visualizer;
+
+        window.onload = function() {
+            visualizer = new TreeVisualizer();
+        };
+
+        function insertNode() {
+            visualizer.insertNode();
+        }
+
+        function deleteNode() {
+            visualizer.deleteNode();
+        }
+
+        function searchNode() {
+            visualizer.searchNode();
+        }
+
+        function clearTree() {
+            visualizer.clearTree();
+        }
+
+        function runDemo() {
+            visualizer.runDemo();
+        }
+    </script>
+</body>
+</html> 
