@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heap Data Structures - Interactive Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #333333;
+        }
+
+        .heap-type-section {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .heap-type-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .heap-type-btn {
+            padding: 12px 20px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .heap-type-btn.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .heap-type-btn:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+
+        .controls-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .controls-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .operation-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .input-group input {
+            padding: 8px 12px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 80px;
+            text-align: center;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .action-btn:disabled {
+            background-color: #e0e0e0;
+            border-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+        }
+
+        .visualization-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .visualization-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .heap-canvas {
+            width: 100%;
+            height: 450px;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            background-color: #fafafa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .heap-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+        }
+
+        .heap-node.binary-heap {
+            background-color: #f0f8ff;
+        }
+
+        .heap-node.binomial-heap {
+            background-color: #f0fff0;
+        }
+
+        .heap-node.fibonacci-heap {
+            background-color: #fff8f0;
+        }
+
+        .heap-node.priority-queue {
+            background-color: #fff0f8;
+        }
+
+        .heap-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .heap-node.highlighted {
+            border-color: #ff0000;
+            border-width: 3px;
+            animation: pulse 1s infinite;
+        }
+
+        .heap-node.minimum {
+            border-color: #008000;
+            border-width: 3px;
+            background-color: #e6ffe6;
+        }
+
+        .heap-edge {
+            position: absolute;
+            background-color: #000000;
+            z-index: 1;
+            border-radius: 1px;
+        }
+
+        .node-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #666666;
+            background-color: #ffffff;
+            padding: 2px 4px;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+        }
+
+        .array-representation {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .array-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .array-elements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .array-element {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 3px;
+            padding: 8px 12px;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .array-element.highlighted {
+            background-color: #ffff99;
+            border-color: #ff0000;
+        }
+
+        .info-section {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .info-card h4 {
+            margin-bottom: 8px;
+            color: #000000;
+            font-size: 1.1em;
+        }
+
+        .info-card p {
+            color: #333333;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .message-section {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .message-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 5px;
+        }
+
+        .message-area {
+            background-color: #f8f8f8;
+            border: 2px solid #333333;
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message {
+            padding: 3px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message:last-child {
+            border-bottom: none;
+        }
+
+        .message.success {
+            color: #008000;
+        }
+
+        .message.error {
+            color: #cc0000;
+        }
+
+        .message.info {
+            color: #000080;
+        }
+
+        .complexity-section {
+            background-color: #f8f8f8;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .complexity-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #000000;
+            border-bottom: 2px solid #333333;
+            padding-bottom: 10px;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            border: 2px solid #000000;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .complexity-table th {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+
+        .empty-heap-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666666;
+            font-size: 1.1em;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .heap-type-selector,
+            .operation-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Heap Data Structures - Interactive Visualization</h1>
+            <p>Explore Binary Heaps, Binomial Heaps, Fibonacci Heaps, and Priority Queues with interactive operations</p>
+        </div>
+
+        <div class="heap-type-section">
+            <div class="heap-type-selector">
+                <button class="heap-type-btn active" data-type="binary">Binary Heap</button>
+                <button class="heap-type-btn" data-type="binomial">Binomial Heap</button>
+                <button class="heap-type-btn" data-type="fibonacci">Fibonacci Heap</button>
+                <button class="heap-type-btn" data-type="priority">Priority Queue</button>
+            </div>
+            <div id="heap-description" style="text-align: center; margin-top: 10px; color: #333333;">
+                <strong>Binary Heap:</strong> Array-based complete binary tree with heap property. Efficient insert and extract operations.
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <div class="controls-title">Heap Operations</div>
+            <div class="operation-controls">
+                <div class="input-group">
+                    <label for="nodeValue">Value:</label>
+                    <input type="number" id="nodeValue" placeholder="42" min="1" max="999">
+                </div>
+                <button class="action-btn" onclick="insertElement()">Insert</button>
+                <button class="action-btn" onclick="extractMin()">Extract Min</button>
+                <button class="action-btn" onclick="peekMin()">Peek Min</button>
+                <div class="input-group">
+                    <label for="searchValue">Search:</label>
+                    <input type="number" id="searchValue" placeholder="42" min="1" max="999">
+                </div>
+                <button class="action-btn" onclick="searchElement()">Find</button>
+                <button class="action-btn" onclick="clearHeap()">Clear</button>
+                <button class="action-btn" onclick="runDemo()">Demo</button>
+            </div>
+            <div style="margin-top: 15px;">
+                <div class="input-group">
+                    <label for="heapType">Heap Type:</label>
+                    <select id="heapType" onchange="changeHeapType()" style="padding: 8px 12px; border: 2px solid #333333; border-radius: 5px; font-size: 1em;">
+                        <option value="min">Min Heap</option>
+                        <option value="max">Max Heap</option>
+                    </select>
+                </div>
+                <button class="action-btn" onclick="buildFromArray()">Build from Array</button>
+                <button class="action-btn" onclick="heapSort()">Heap Sort</button>
+                <button class="action-btn" onclick="validateHeap()">Validate</button>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <div class="visualization-title">Heap Visualization</div>
+            <div class="heap-canvas" id="heapCanvas">
+                <div class="empty-heap-message">
+                    <h3>Empty Heap</h3>
+                    <p>Enter a value and click Insert to start building your heap</p>
+                </div>
+            </div>
+            <div class="array-representation">
+                <div class="array-title">Array Representation:</div>
+                <div class="array-elements" id="arrayElements">
+                    <span style="color: #666;">No elements</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Heap Size</h4>
+                    <p id="heap-size">0</p>
+                </div>
+                <div class="info-card">
+                    <h4>Heap Height</h4>
+                    <p id="heap-height">0</p>
+                </div>
+                <div class="info-card">
+                    <h4>Minimum Element</h4>
+                    <p id="min-element">-</p>
+                </div>
+                <div class="info-card">
+                    <h4>Last Operation</h4>
+                    <p id="last-operation">None</p>
+                </div>
+                <div class="info-card">
+                    <h4>Heap Type</h4>
+                    <p id="current-heap-type">Min Binary Heap</p>
+                </div>
+                <div class="info-card">
+                    <h4>Valid Heap</h4>
+                    <p id="heap-valid">✓</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="message-section">
+            <div class="message-title">Operation Messages</div>
+            <div class="message-area" id="messageArea">
+                <div class="message info">Welcome to Heap Visualizer! Start by inserting elements.</div>
+            </div>
+        </div>
+
+        <div class="complexity-section">
+            <div class="complexity-title">Time Complexity Analysis</div>
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Binary Heap</th>
+                        <th>Binomial Heap</th>
+                        <th>Fibonacci Heap</th>
+                        <th>Priority Queue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Insert</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>O(1)*</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td>Extract Min</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)*</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td>Peek Min</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Decrease Key</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>O(1)*</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td>Union</td>
+                        <td>O(n)</td>
+                        <td>O(log n)</td>
+                        <td>O(1)*</td>
+                        <td>O(n)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #666;">* Amortized time complexity</p>
+        </div>
+    </div>
+
+    <script>
+        class HeapVisualizer {
+            constructor() {
+                this.heap = [];
+                this.heapType = 'min'; // 'min' or 'max'
+                this.visualType = 'binary'; // 'binary', 'binomial', 'fibonacci', 'priority'
+                this.canvas = document.getElementById('heapCanvas');
+                this.nodeElements = new Map();
+                this.edgeElements = [];
+                this.nextNodeId = 1;
+                
+                this.initializeEventListeners();
+                this.updateHeapInfo();
+                
+                // Heap type descriptions
+                this.heapDescriptions = {
+                    binary: "Binary Heap: Array-based complete binary tree with heap property. Efficient insert and extract operations.",
+                    binomial: "Binomial Heap: Collection of binomial trees with efficient merge operations. Supports union in O(log n) time.",
+                    fibonacci: "Fibonacci Heap: Advanced heap with optimal amortized complexities. Excellent for decrease-key operations.",
+                    priority: "Priority Queue: Abstract data type where elements are served based on priority rather than insertion order."
+                };
+            }
+
+            initializeEventListeners() {
+                // Heap type selector
+                document.querySelectorAll('.heap-type-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.heap-type-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.visualType = btn.dataset.type;
+                        this.updateHeapDescription();
+                        this.updateHeapInfo();
+                        this.renderHeap();
+                    });
+                });
+
+                // Enter key support for inputs
+                document.getElementById('nodeValue').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.insertElement();
+                });
+                
+                document.getElementById('searchValue').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.searchElement();
+                });
+            }
+
+            insertElement() {
+                const value = parseInt(document.getElementById('nodeValue').value);
+                if (isNaN(value) || value < 1 || value > 999) {
+                    this.addMessage('Please enter a valid number between 1 and 999', 'error');
+                    return;
+                }
+
+                this.heap.push(value);
+                this.heapifyUp(this.heap.length - 1);
+                
+                this.addMessage(`Inserted ${value} into ${this.heapType} heap`, 'success');
+                document.getElementById('last-operation').textContent = `Inserted ${value}`;
+                document.getElementById('nodeValue').value = '';
+                
+                this.updateHeapInfo();
+                this.renderHeap();
+                this.highlightNode(this.heap.length - 1);
+            }
+
+            extractMin() {
+                if (this.heap.length === 0) {
+                    this.addMessage('Cannot extract from empty heap', 'error');
+                    return;
+                }
+
+                const minValue = this.heap[0];
+                const lastValue = this.heap.pop();
+                
+                if (this.heap.length > 0) {
+                    this.heap[0] = lastValue;
+                    this.heapifyDown(0);
+                }
+                
+                this.addMessage(`Extracted ${this.heapType === 'min' ? 'minimum' : 'maximum'} value: ${minValue}`, 'success');
+                document.getElementById('last-operation').textContent = `Extracted ${minValue}`;
+                
+                this.updateHeapInfo();
+                this.renderHeap();
+            }
+
+            peekMin() {
+                if (this.heap.length === 0) {
+                    this.addMessage('Heap is empty', 'error');
+                    return;
+                }
+
+                const minValue = this.heap[0];
+                this.addMessage(`${this.heapType === 'min' ? 'Minimum' : 'Maximum'} value: ${minValue}`, 'info');
+                document.getElementById('last-operation').textContent = `Peeked ${minValue}`;
+                
+                this.highlightNode(0);
+            }
+
+            searchElement() {
+                const value = parseInt(document.getElementById('searchValue').value);
+                if (isNaN(value)) {
+                    this.addMessage('Please enter a valid search value', 'error');
+                    return;
+                }
+
+                const index = this.heap.indexOf(value);
+                if (index !== -1) {
+                    this.addMessage(`Found ${value} at index ${index}`, 'success');
+                    this.highlightNode(index);
+                } else {
+                    this.addMessage(`${value} not found in heap`, 'error');
+                }
+                
+                document.getElementById('searchValue').value = '';
+            }
+
+            clearHeap() {
+                this.heap = [];
+                this.nextNodeId = 1;
+                this.addMessage('Cleared heap', 'info');
+                document.getElementById('last-operation').textContent = 'Cleared heap';
+                
+                this.updateHeapInfo();
+                this.renderHeap();
+            }
+
+            runDemo() {
+                this.clearHeap();
+                const demoValues = [50, 30, 70, 20, 40, 60, 80, 10, 15, 35];
+                
+                this.addMessage(`Running ${this.visualType} heap demo with values: ${demoValues.join(', ')}`, 'info');
+                
+                let delay = 0;
+                demoValues.forEach((value) => {
+                    setTimeout(() => {
+                        document.getElementById('nodeValue').value = value;
+                        this.insertElement();
+                    }, delay);
+                    delay += 800;
+                });
+            }
+
+            buildFromArray() {
+                const input = prompt("Enter comma-separated values (e.g., 4,1,3,2,16,9,10,14,8,7):");
+                if (!input) return;
+                
+                const values = input.split(',').map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+                if (values.length === 0) {
+                    this.addMessage('No valid numbers provided', 'error');
+                    return;
+                }
+                
+                this.heap = [...values];
+                this.buildHeap();
+                
+                this.addMessage(`Built heap from array: [${values.join(', ')}]`, 'success');
+                document.getElementById('last-operation').textContent = 'Built from array';
+                
+                this.updateHeapInfo();
+                this.renderHeap();
+            }
+
+            heapSort() {
+                if (this.heap.length === 0) {
+                    this.addMessage('Cannot sort empty heap', 'error');
+                    return;
+                }
+                
+                const original = [...this.heap];
+                const sorted = [];
+                
+                while (this.heap.length > 0) {
+                    sorted.push(this.heap[0]);
+                    this.extractMin();
+                }
+                
+                this.addMessage(`Heap sort result: [${sorted.join(', ')}]`, 'success');
+                document.getElementById('last-operation').textContent = 'Heap sorted';
+                
+                // Restore original heap
+                this.heap = original;
+                this.buildHeap();
+                this.updateHeapInfo();
+                this.renderHeap();
+            }
+
+            validateHeap() {
+                const isValid = this.isValidHeap();
+                const message = isValid ? 'Heap property is satisfied ✓' : 'Heap property is violated ✗';
+                const type = isValid ? 'success' : 'error';
+                
+                this.addMessage(message, type);
+                document.getElementById('heap-valid').textContent = isValid ? '✓' : '✗';
+                document.getElementById('heap-valid').style.color = isValid ? '#008000' : '#cc0000';
+            }
+
+            changeHeapType() {
+                const newType = document.getElementById('heapType').value;
+                if (newType !== this.heapType) {
+                    this.heapType = newType;
+                    if (this.heap.length > 0) {
+                        this.buildHeap();
+                    }
+                    this.updateHeapInfo();
+                    this.renderHeap();
+                    this.addMessage(`Changed to ${newType} heap`, 'info');
+                }
+            }
+
+            // Heap algorithms
+            heapifyUp(index) {
+                while (index > 0) {
+                    const parentIndex = Math.floor((index - 1) / 2);
+                    if (!this.shouldSwap(parentIndex, index)) break;
+                    
+                    this.swap(parentIndex, index);
+                    index = parentIndex;
+                }
+            }
+
+            heapifyDown(index) {
+                while (true) {
+                    let targetIndex = index;
+                    const leftChild = 2 * index + 1;
+                    const rightChild = 2 * index + 2;
+                    
+                    if (leftChild < this.heap.length && this.shouldSwap(targetIndex, leftChild)) {
+                        targetIndex = leftChild;
+                    }
+                    
+                    if (rightChild < this.heap.length && this.shouldSwap(targetIndex, rightChild)) {
+                        targetIndex = rightChild;
+                    }
+                    
+                    if (targetIndex === index) break;
+                    
+                    this.swap(index, targetIndex);
+                    index = targetIndex;
+                }
+            }
+
+            buildHeap() {
+                const lastParent = Math.floor((this.heap.length - 2) / 2);
+                for (let i = lastParent; i >= 0; i--) {
+                    this.heapifyDown(i);
+                }
+            }
+
+            shouldSwap(parentIndex, childIndex) {
+                if (this.heapType === 'min') {
+                    return this.heap[parentIndex] > this.heap[childIndex];
+                } else {
+                    return this.heap[parentIndex] < this.heap[childIndex];
+                }
+            }
+
+            swap(i, j) {
+                [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+            }
+
+            isValidHeap() {
+                for (let i = 0; i < this.heap.length; i++) {
+                    const leftChild = 2 * i + 1;
+                    const rightChild = 2 * i + 2;
+                    
+                    if (leftChild < this.heap.length && this.shouldSwap(i, leftChild)) {
+                        return false;
+                    }
+                    
+                    if (rightChild < this.heap.length && this.shouldSwap(i, rightChild)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            // Visualization methods
+            renderHeap() {
+                this.canvas.innerHTML = '';
+                this.nodeElements.clear();
+                this.edgeElements = [];
+                
+                if (this.heap.length === 0) {
+                    this.canvas.innerHTML = '<div class="empty-heap-message"><h3>Empty Heap</h3><p>Enter a value and click Insert to start building your heap</p></div>';
+                    this.updateArrayRepresentation();
+                    return;
+                }
+                
+                this.calculatePositions();
+                this.renderEdges();
+                this.renderNodes();
+                this.updateArrayRepresentation();
+            }
+
+            calculatePositions() {
+                const canvasWidth = this.canvas.offsetWidth;
+                const canvasHeight = this.canvas.offsetHeight;
+                const levels = Math.floor(Math.log2(this.heap.length) + 1);
+                const levelHeight = Math.max(60, (canvasHeight - 80) / levels);
+                
+                this.nodePositions = [];
+                
+                for (let i = 0; i < this.heap.length; i++) {
+                    const level = Math.floor(Math.log2(i + 1));
+                    const positionInLevel = i - (Math.pow(2, level) - 1);
+                    const totalNodesInLevel = Math.pow(2, level);
+                    
+                    const x = (canvasWidth / (totalNodesInLevel + 1)) * (positionInLevel + 1);
+                    const y = 40 + level * levelHeight;
+                    
+                    this.nodePositions[i] = { x, y };
+                }
+            }
+
+            renderEdges() {
+                for (let i = 0; i < this.heap.length; i++) {
+                    const leftChild = 2 * i + 1;
+                    const rightChild = 2 * i + 2;
+                    
+                    if (leftChild < this.heap.length) {
+                        this.createEdge(i, leftChild);
+                    }
+                    
+                    if (rightChild < this.heap.length) {
+                        this.createEdge(i, rightChild);
+                    }
+                }
+            }
+
+            createEdge(parentIndex, childIndex) {
+                const parent = this.nodePositions[parentIndex];
+                const child = this.nodePositions[childIndex];
+                
+                const edge = document.createElement('div');
+                edge.className = 'heap-edge';
+                
+                const dx = child.x - parent.x;
+                const dy = child.y - parent.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                edge.style.width = length + 'px';
+                edge.style.height = '2px';
+                edge.style.left = parent.x + 'px';
+                edge.style.top = parent.y + 25 + 'px';
+                edge.style.transformOrigin = '0 0';
+                edge.style.transform = `rotate(${angle}deg)`;
+                
+                this.canvas.appendChild(edge);
+                this.edgeElements.push(edge);
+            }
+
+            renderNodes() {
+                for (let i = 0; i < this.heap.length; i++) {
+                    const position = this.nodePositions[i];
+                    
+                    const nodeElement = document.createElement('div');
+                    nodeElement.className = `heap-node ${this.visualType}-heap`;
+                    nodeElement.style.left = (position.x - 25) + 'px';
+                    nodeElement.style.top = (position.y - 25) + 'px';
+                    nodeElement.textContent = this.heap[i];
+                    nodeElement.title = `Value: ${this.heap[i]}, Index: ${i}`;
+                    
+                    // Mark minimum element
+                    if (i === 0) {
+                        nodeElement.classList.add('minimum');
+                    }
+                    
+                    // Add index label
+                    const indexLabel = document.createElement('div');
+                    indexLabel.className = 'node-label';
+                    indexLabel.textContent = i;
+                    nodeElement.appendChild(indexLabel);
+                    
+                    this.canvas.appendChild(nodeElement);
+                    this.nodeElements.set(i, nodeElement);
+                }
+            }
+
+            updateArrayRepresentation() {
+                const arrayContainer = document.getElementById('arrayElements');
+                arrayContainer.innerHTML = '';
+                
+                if (this.heap.length === 0) {
+                    arrayContainer.innerHTML = '<span style="color: #666;">No elements</span>';
+                    return;
+                }
+                
+                this.heap.forEach((value, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'array-element';
+                    element.textContent = value;
+                    element.title = `Index: ${index}, Value: ${value}`;
+                    element.onclick = () => this.highlightNode(index);
+                    arrayContainer.appendChild(element);
+                });
+            }
+
+            highlightNode(index) {
+                this.clearHighlights();
+                const element = this.nodeElements.get(index);
+                if (element) {
+                    element.classList.add('highlighted');
+                    setTimeout(() => {
+                        element.classList.remove('highlighted');
+                    }, 2000);
+                }
+                
+                // Highlight in array representation
+                const arrayElements = document.querySelectorAll('.array-element');
+                if (arrayElements[index]) {
+                    arrayElements[index].classList.add('highlighted');
+                    setTimeout(() => {
+                        arrayElements[index].classList.remove('highlighted');
+                    }, 2000);
+                }
+            }
+
+            clearHighlights() {
+                this.nodeElements.forEach(element => {
+                    element.classList.remove('highlighted');
+                });
+                
+                document.querySelectorAll('.array-element').forEach(element => {
+                    element.classList.remove('highlighted');
+                });
+            }
+
+            updateHeapInfo() {
+                document.getElementById('heap-size').textContent = this.heap.length;
+                document.getElementById('heap-height').textContent = this.heap.length > 0 ? Math.floor(Math.log2(this.heap.length)) + 1 : 0;
+                document.getElementById('min-element').textContent = this.heap.length > 0 ? this.heap[0] : '-';
+                document.getElementById('current-heap-type').textContent = `${this.heapType.charAt(0).toUpperCase() + this.heapType.slice(1)} ${this.visualType.charAt(0).toUpperCase() + this.visualType.slice(1)} Heap`;
+                
+                const isValid = this.heap.length === 0 || this.isValidHeap();
+                document.getElementById('heap-valid').textContent = isValid ? '✓' : '✗';
+                document.getElementById('heap-valid').style.color = isValid ? '#008000' : '#cc0000';
+            }
+
+            updateHeapDescription() {
+                document.getElementById('heap-description').innerHTML = 
+                    `<strong>${this.visualType.charAt(0).toUpperCase() + this.visualType.slice(1)} Heap:</strong> ${this.heapDescriptions[this.visualType]}`;
+            }
+
+            addMessage(text, type = 'info') {
+                const messageArea = document.getElementById('messageArea');
+                const message = document.createElement('div');
+                message.className = `message ${type}`;
+                message.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+                
+                messageArea.appendChild(message);
+                messageArea.scrollTop = messageArea.scrollHeight;
+                
+                // Keep only last 20 messages
+                while (messageArea.children.length > 20) {
+                    messageArea.removeChild(messageArea.firstChild);
+                }
+            }
+        }
+
+        // Global variables and functions
+        let visualizer;
+
+        window.onload = function() {
+            visualizer = new HeapVisualizer();
+        };
+
+        function insertElement() {
+            visualizer.insertElement();
+        }
+
+        function extractMin() {
+            visualizer.extractMin();
+        }
+
+        function peekMin() {
+            visualizer.peekMin();
+        }
+
+        function searchElement() {
+            visualizer.searchElement();
+        }
+
+        function clearHeap() {
+            visualizer.clearHeap();
+        }
+
+        function runDemo() {
+            visualizer.runDemo();
+        }
+
+        function buildFromArray() {
+            visualizer.buildFromArray();
+        }
+
+        function heapSort() {
+            visualizer.heapSort();
+        }
+
+        function validateHeap() {
+            visualizer.validateHeap();
+        }
+
+        function changeHeapType() {
+            visualizer.changeHeapType();
+        }
+    </script>
+</body>
+</html> 

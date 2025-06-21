@@ -1,4 +1,3 @@
-package Basics;
 import java.util.*;
 public class OddEven {
     public static void oddEven(int number){

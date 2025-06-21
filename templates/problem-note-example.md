@@ -1,78 +1,120 @@
-# Two Sum
+# Two Sum Problem - Example Template
 
-**Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-26 | **Status:** Solved
+**Problem:** LeetCode 1. Two Sum  
+**Date Solved:** [CURRENT_DATE] | **Revision Due:** [CURRENT_DATE + 7] | **Status:** Solved  
+**Source:** AC 01-Arrays | **Difficulty:** Easy | **Time:** 15 min
+
+> **Dynamic Date Instructions:** 
+> - Replace [CURRENT_DATE] with actual system date (format: YYYY-MM-DD)
+> - Replace [CURRENT_DATE + 7] with date 7 days from current date
+> - Use `date +"%Y-%m-%d"` command for current date
+> - Use `date -d "+7 days" +"%Y-%m-%d"` for revision date
 
 ---
 
 ## Problem Statement
-Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
-## Intuition/Approach
-Use a hash map to store numbers we've seen and their indices. For each number, check if its complement (target - current_number) exists in the hash map.
+Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to target.
 
-## Key Observations
-- Need to return indices, not the actual numbers
-- Only one solution exists, so we can return immediately when found
-- Hash map provides O(1) lookup time
-- We build the hash map as we iterate, so we don't need to worry about using same element twice
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
-## Algorithm Steps
-1. Create an empty hash map to store {number: index}
-2. Iterate through the array with index and value
-3. Calculate complement = target - current_value
-4. Check if complement exists in hash map
-5. If yes, return [hash_map[complement], current_index]
-6. If no, add current_value and its index to hash map
-7. Continue until solution found
+**Example:**
+```
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: nums[0] + nums[1] = 2 + 7 = 9
+```
 
-## Complexity Analysis
-- **Time Complexity:** O(n)
-- **Space Complexity:** O(n)
-- **Justification:** Single pass through array (O(n)), hash map operations are O(1), worst case we store all elements in hash map (O(n) space)
+---
 
-## Edge Cases Considered
-- [x] Empty input - Problem guarantees solution exists
-- [x] Single element - Problem guarantees exactly one solution (need at least 2 elements)
-- [x] Large input - Hash map scales well
-- [x] Negative numbers - Works fine with hash map
-- [x] Other: Duplicate numbers - handled correctly since we check before adding
+## Intuition & Approach
+
+**Key Insight:** Instead of checking every pair (O(n²)), use a hash map to store complements and find them in O(1).
+
+**Algorithm Steps:**
+1. Create hash map to store number → index mapping
+2. For each element, calculate complement = target - current number
+3. Check if complement exists in hash map
+4. If yes, return current index and complement's index
+5. If no, add current number and index to hash map
+
+**Why This Works:** We're essentially asking "have I seen the number that would complete this sum before?"
+
+---
 
 ## Solution Code
 
-```python
-# Language: Python
-def twoSum(nums, target):
-    seen = {}  # {number: index}
+```java
+public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> map = new HashMap<>();
     
-    for i, num in enumerate(nums):
-        complement = target - num
-        if complement in seen:
-            return [seen[complement], i]
-        seen[num] = i
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+        
+        if (map.containsKey(complement)) {
+            return new int[]{map.get(complement), i};
+        }
+        
+        map.put(nums[i], i);
+    }
     
-    return []  # Should never reach here per problem constraints
+    throw new IllegalArgumentException("No solution found");
+}
 ```
 
+---
+
+## Complexity Analysis
+
+- **Time Complexity:** O(n) - Single pass through array
+- **Space Complexity:** O(n) - Hash map storage for n elements
+
+**Trade-off:** We trade space for time efficiency.
+
+---
+
+## Edge Cases Considered
+
+- [ ] Empty array
+- [ ] Array with only one element  
+- [ ] No valid solution exists
+- [ ] Multiple solutions (problem guarantees exactly one)
+- [ ] Duplicate numbers in array
+- [ ] Negative numbers
+- [ ] Target is 0
+
+---
+
 ## Alternative Approaches
-1. **Brute Force:** O(n²) - check every pair
-2. **Sort + Two Pointers:** O(n log n) - but loses original indices
-3. **Current Hash Map:** O(n) - optimal for this problem
 
-## Related Problems
-- **AC:** Three Sum, Four Sum
-- **Kunal:** Array pair problems
-- **LeetCode:** #1 Two Sum, #15 3Sum, #18 4Sum
+1. **Brute Force O(n²):** Check every pair combination
+2. **Sort + Two Pointers O(n log n):** Sort first, then use two pointers (but loses original indices)
 
-## Personal Notes
-- Initially tried brute force, realized hash map is much more efficient
-- Remember that we're looking for indices, not values
-- Hash map approach is a common pattern for "find complement" problems
+---
 
-## Revision History
-- **First Solve:** 2024-12-19 - Solved with hash map approach, understood the pattern
-- **Review 1:** (scheduled for 2024-12-26)
-- **Review 2:** (to be scheduled)
+## Similar Problems
+
+- 3Sum (LeetCode 15)
+- 4Sum (LeetCode 18)
+- Two Sum II - Input array is sorted (LeetCode 167)
+
+---
+
+## Key Takeaways
+
+- Hash maps are powerful for complement-finding problems
+- Trading space for time is often worthwhile
+- Consider what information you need to store (value vs. index vs. both)
+
+---
+
+## Learning Log
+
+- **First Solve:** [CURRENT_DATE] - Solved with hash map approach, understood the pattern
+
+**Revision Notes:**
+- [REVISION_DATE]: [Notes from revision]
+- [REVISION_DATE]: [Notes from revision]
 
 ---
 **Tags:** #arrays #hashmap #twopointers #complement 

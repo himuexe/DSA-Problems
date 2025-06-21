@@ -1,4 +1,3 @@
-package Basics;
 import java.util.*;
 public class Factorial {
     public static int calculateFactorial(int number){

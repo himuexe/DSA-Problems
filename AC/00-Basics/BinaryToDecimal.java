@@ -1,4 +1,3 @@
-package Basics;
 import java.util.*;
 public class BinaryToDecimal {
     public static int conversion(int binNum){

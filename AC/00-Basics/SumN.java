@@ -1,4 +1,3 @@
-package Basics;
 import java.util.*;
 public class SumN {
     public static int sumUptoN(int number){

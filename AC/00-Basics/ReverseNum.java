@@ -1,4 +1,3 @@
-package Basics;
 import java.util.*;
 public class ReverseNum {
     public static  int calculateReverse(int number){
