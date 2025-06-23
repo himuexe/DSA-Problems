@@ -1,7 +1,7 @@
 # Problem Title
 
 **Source:** [AC/Kunal] | **Topic:** [Arrays/LinkedList/etc] | **Difficulty:** [Easy/Medium/Hard]  
-**Date Solved:** YYYY-MM-DD | **Revision Due:** YYYY-MM-DD | **Status:** [Solved/Reviewing/Mastered]
+**Date Solved:** [CURRENT_DATE] | **Revision Due:** [CURRENT_DATE + 7] | **Status:** [Solved/Reviewing/Mastered]
 
 ---
 
@@ -63,9 +63,9 @@ def solution():
 
 ## Revision History
 <!-- Track your review sessions -->
-- **First Solve:** YYYY-MM-DD - [Notes]
-- **Review 1:** YYYY-MM-DD - [Notes]
-- **Review 2:** YYYY-MM-DD - [Notes]
+- **First Solve:** [CURRENT_DATE] - [Notes]
+- **Review 1:** [CURRENT_DATE + 7] - [Notes]
+- **Review 2:** [CURRENT_DATE + 14] - [Notes]
 
 ---
 **Tags:** #arrays #twopointers #slidingwindow (customize as needed) 
