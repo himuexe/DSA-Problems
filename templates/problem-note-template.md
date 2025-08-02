@@ -1,7 +1,6 @@
 # Problem Title
 
 **Source:** [AC/Kunal] | **Topic:** [Arrays/LinkedList/etc] | **Difficulty:** [Easy/Medium/Hard]  
-**Date Solved:** [CURRENT_DATE] | **Revision Due:** [CURRENT_DATE + 7] | **Status:** [Solved/Reviewing/Mastered]
 
 ---
 
@@ -51,21 +50,8 @@ def solution():
 <!-- Other ways to solve this problem -->
 
 
-## Related Problems
-<!-- Links to similar problems -->
-- **AC:** []
-- **Kunal:** []
-- **LeetCode:** []
-
 ## Personal Notes
 <!-- Any additional thoughts, mistakes made, or insights -->
-
-
-## Revision History
-<!-- Track your review sessions -->
-- **First Solve:** [CURRENT_DATE] - [Notes]
-- **Review 1:** [CURRENT_DATE + 7] - [Notes]
-- **Review 2:** [CURRENT_DATE + 14] - [Notes]
 
 ---
 **Tags:** #arrays #twopointers #slidingwindow (customize as needed) 
