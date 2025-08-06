@@ -1,7 +1,6 @@
 # Two Sum (HashMap Approach)
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -37,7 +36,6 @@ Use HashMap to store each number and its index as we iterate. For each element, 
 - [x] Same number used twice (prevented by algorithm)
 
 ## Solution Code
-
 ```java
 // Language: Java
 import java.util.*;
@@ -59,22 +57,12 @@ class Solution {
 ```
 
 ## Alternative Approaches
-- **Brute Force:** Nested loops O(n²) time, O(1) space
-- **Sort + Two Pointers:** O(n log n) time, but loses original indices
-- **Set Approach:** Similar to HashMap but only tracks existence
-
-## Related Problems
-- **AC:** [TwoSum2.java - sorted array variant with two pointers]
-- **Kunal:** [Array problems with pair sum variants]
-- **LeetCode:** [Two Sum - Problem 1 (this exact problem)]
+- Brute Force: Nested loops O(n²) time, O(1) space
+- Sort + Two Pointers: O(n log n) time, but loses original indices
+- Set Approach: Similar to HashMap but only tracks existence
 
 ## Personal Notes
 Classic HashMap optimization problem. Demonstrates space-time tradeoff where additional O(n) space reduces time from O(n²) to O(n). Pattern useful for many "find pair/complement" problems. Essential interview question.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing AC Arrays implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
 
 ---
 **Tags:** #arrays #hashMap #twoSum #optimization #interview 

@@ -1,7 +1,6 @@
 # Find Largest Element in Array
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -37,43 +36,27 @@ Traverse the array once while keeping track of the maximum element seen so far. 
 - [x] Array with zeros - Handles correctly
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int findLargest(int[] arr) {
     int largest = Integer.MIN_VALUE;
-    
     for (int i = 0; i < arr.length; i++) {
         if (arr[i] > largest) {
             largest = arr[i];
         }
     }
-    
     return largest;
 }
 ```
 
 ## Alternative Approaches
-1. **Sorting:** O(n log n) time - sort array and return last element
-2. **Min/Max Heap:** O(n) time, O(n) space - build max heap and extract max
-3. **Streams (Java 8+):** Arrays.stream(arr).max().orElse(Integer.MIN_VALUE)
-4. **Linear Search:** O(n) time, O(1) space - optimal solution above
-
-## Related Problems
-- **AC:** Second Largest Element, Smallest Element, Kth Largest
-- **Kunal:** Maximum and Minimum in Array
-- **LeetCode:** #215 Kth Largest Element, #414 Third Maximum Number
+- Sorting: O(n log n) time - sort array and return last element
+- Min/Max Heap: O(n) time, O(n) space - build max heap and extract max
+- Streams (Java 8+): Arrays.stream(arr).max().orElse(Integer.MIN_VALUE)
+- Linear Search: O(n) time, O(1) space - optimal solution above
 
 ## Personal Notes
-- Fundamental array traversal problem
-- Good introduction to tracking state while iterating
-- Building block for more complex problems like Kth largest
-- Important to consider edge cases with negative numbers
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented linear search approach, understood array traversal
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+Fundamental array traversal problem. Good introduction to tracking state while iterating. Building block for more complex problems like Kth largest. Important to consider edge cases with negative numbers.
 
 ---
 **Tags:** #arrays #traversal #linear #maximum #fundamental 

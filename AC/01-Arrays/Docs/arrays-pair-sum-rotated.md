@@ -1,7 +1,6 @@
 # Pair Sum in Rotated Sorted Array
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Medium  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -39,7 +38,6 @@ First find the pivot point (largest element), then use two pointers technique wi
 - [x] Target sum with array boundaries
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int[] twoSum(ArrayList<Integer> list, int target){
@@ -71,22 +69,12 @@ public static int pivot(ArrayList<Integer> list){
 ```
 
 ## Alternative Approaches
-- **Binary Search Pivot:** Find pivot using binary search O(log n)
-- **HashMap Approach:** Store complements in hash map
-- **Sort and Two Pointers:** Sort array first (destroys rotation info)
-
-## Related Problems
-- **AC:** [TwoSum.java - classic two sum problem]
-- **Kunal:** [Binary Search problems - pivot finding]
-- **LeetCode:** [Search in Rotated Sorted Array - Problem 33]
+- Binary Search Pivot: Find pivot using binary search O(log n)
+- HashMap Approach: Store complements in hash map
+- Sort and Two Pointers: Sort array first (destroys rotation info)
 
 ## Personal Notes
 Combines pivot finding with two pointers technique. Modulo arithmetic ensures circular traversal. Understanding rotated arrays is crucial for many advanced problems. The approach maintains O(n) complexity while handling rotation.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing AC Arrays implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
 
 ---
 **Tags:** #arrays #twoPointers #rotatedArray #pivotFinding #circularTraversal 

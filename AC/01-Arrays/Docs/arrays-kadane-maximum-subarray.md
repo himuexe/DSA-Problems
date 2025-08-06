@@ -1,7 +1,6 @@
 # Maximum Subarray Sum (Kadane's Algorithm)
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -37,45 +36,29 @@ Use Kadane's algorithm which maintains two variables: `maxCurrent` (maximum sum 
 - [x] Empty array - Not applicable (problem states at least one element)
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int kadane(int[] arr) {
     int maxCurrent = arr[0];
     int maxGlobal = arr[0];
-    
     for (int i = 1; i < arr.length; i++) {
         // Choose to either start new subarray or extend current one
         maxCurrent = Math.max(arr[i], maxCurrent + arr[i]);
         // Update global maximum
         maxGlobal = Math.max(maxGlobal, maxCurrent);
     }
-    
     return maxGlobal;
 }
 ```
 
 ## Alternative Approaches
-1. **Brute Force:** O(n³) - check all possible subarrays
-2. **Optimized Brute Force:** O(n²) - use cumulative sums
-3. **Divide and Conquer:** O(n log n) - recursively find max in left, right, and crossing
-4. **Kadane's Algorithm:** O(n) - optimal dynamic programming solution
-
-## Related Problems
-- **AC:** Maximum Product Subarray, Maximum Sum Circular Subarray
-- **Kunal:** Similar subarray problems
-- **LeetCode:** #53 Maximum Subarray, #152 Maximum Product Subarray
+- Brute Force: O(n³) - check all possible subarrays
+- Optimized Brute Force: O(n²) - use cumulative sums
+- Divide and Conquer: O(n log n) - recursively find max in left, right, and crossing
+- Kadane's Algorithm: O(n) - optimal dynamic programming solution
 
 ## Personal Notes
-- This is a fundamental DP problem that demonstrates the optimization principle
-- The key insight is that at each position we make a local optimal choice
-- Useful pattern for many other array optimization problems
-- Important to understand both the algorithm and the underlying DP concept
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented using Kadane's algorithm, understood DP pattern
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+This is a fundamental DP problem that demonstrates the optimization principle. The key insight is that at each position we make a local optimal choice. Useful pattern for many other array optimization problems. Important to understand both the algorithm and the underlying DP concept.
 
 ---
 **Tags:** #arrays #dynamicprogramming #kadane #subarray #optimization 

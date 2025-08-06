@@ -1,7 +1,6 @@
 # Binary Search
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -41,17 +40,14 @@ Use binary search algorithm to efficiently find the target by repeatedly dividin
 - [x] Duplicate elements - Return any valid index
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int binarySearch(int[] arr, int target) {
     int left = 0;
     int right = arr.length - 1;
-    
     while (left <= right) {
         // Avoid overflow with this calculation
         int mid = left + (right - left) / 2;
-        
         if (arr[mid] == target) {
             return mid;  // Target found
         } else if (arr[mid] < target) {
@@ -60,31 +56,17 @@ public static int binarySearch(int[] arr, int target) {
             right = mid - 1;  // Search left half
         }
     }
-    
     return -1;  // Target not found
 }
 ```
 
 ## Alternative Approaches
-1. **Linear Search:** O(n) time - check each element sequentially
-2. **Recursive Binary Search:** O(log n) time, O(log n) space - recursive implementation
-3. **Iterative Binary Search:** O(log n) time, O(1) space - optimal solution above
-
-## Related Problems
-- **AC:** First and Last Position, Search Insert Position
-- **Kunal:** Binary Search variations, Peak Element
-- **LeetCode:** #704 Binary Search, #35 Search Insert Position, #34 Find First and Last Position
+- Linear Search: O(n) time - check each element sequentially
+- Recursive Binary Search: O(log n) time, O(log n) space - recursive implementation
+- Iterative Binary Search: O(log n) time, O(1) space - optimal solution above
 
 ## Personal Notes
-- Fundamental divide-and-conquer algorithm
-- Must remember the overflow-safe mid calculation
-- Foundation for many advanced search problems
-- Key insight: eliminate half the search space each iteration
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented iterative binary search, understood divide-and-conquer
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+Fundamental divide-and-conquer algorithm. Must remember the overflow-safe mid calculation. Foundation for many advanced search problems. Key insight: eliminate half the search space each iteration.
 
 ---
 **Tags:** #arrays #binarysearch #divideandconquer #searching #logarithmic 

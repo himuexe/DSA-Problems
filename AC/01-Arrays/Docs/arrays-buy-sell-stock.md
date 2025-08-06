@@ -1,7 +1,6 @@
 # Best Time to Buy and Sell Stock
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -39,13 +38,11 @@ Track the minimum price seen so far and the maximum profit possible at each day.
 - [x] Mixed prices - Find optimal buy and sell days
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int maxProfit(int[] prices) {
     int minPrice = Integer.MAX_VALUE;
     int maxProfit = 0;
-    
     for (int price : prices) {
         if (price < minPrice) {
             minPrice = price;  // Better buying opportunity
@@ -53,32 +50,18 @@ public static int maxProfit(int[] prices) {
             maxProfit = price - minPrice;  // Better selling opportunity
         }
     }
-    
     return maxProfit;
 }
 ```
 
 ## Alternative Approaches
-1. **Brute Force:** O(n²) - try all possible buy and sell day combinations
-2. **Two Pointer:** O(n) - similar to current approach but with explicit buy/sell day tracking
-3. **Dynamic Programming:** O(n) - track states (hold/sold) but overkill for single transaction
-4. **Kadane's Algorithm Variant:** O(n) - treat as maximum subarray problem on price differences
-
-## Related Problems
-- **AC:** Best Time to Buy and Sell Stock II (multiple transactions)
-- **Kunal:** Maximum Subarray (similar single-pass logic)
-- **LeetCode:** #121 Best Time to Buy and Sell Stock, #122 Best Time to Buy and Sell Stock II
+- Brute Force: O(n²) - try all possible buy and sell day combinations
+- Two Pointer: O(n) - similar to current approach but with explicit buy/sell day tracking
+- Dynamic Programming: O(n) - track states (hold/sold) but overkill for single transaction
+- Kadane's Algorithm Variant: O(n) - treat as maximum subarray problem on price differences
 
 ## Personal Notes
-- This is essentially finding the maximum difference between two elements where the larger element comes after the smaller element
-- Similar to maximum subarray problem but with different constraints
-- Good example of greedy algorithm working optimally
-- Foundation for more complex stock trading problems
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented greedy approach, understood the buy-low-sell-high pattern
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+This is essentially finding the maximum difference between two elements where the larger element comes after the smaller element. Similar to maximum subarray problem but with different constraints. Good example of greedy algorithm working optimally. Foundation for more complex stock trading problems.
 
 ---
 **Tags:** #arrays #greedy #singlepass #profit #buysell 

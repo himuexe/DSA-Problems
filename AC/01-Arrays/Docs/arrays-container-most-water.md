@@ -1,7 +1,6 @@
 # Container With Most Water
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Medium  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -39,7 +38,6 @@ Use two pointers starting at both ends. Calculate area using minimum height and 
 - [x] Single tall element among short ones
 
 ## Solution Code
-
 ```java
 // Language: Java
 class Solution {
@@ -65,22 +63,12 @@ class Solution {
 ```
 
 ## Alternative Approaches
-- **Brute Force:** Try all pairs O(n²) time
-- **Divide and Conquer:** Recursive approach with similar complexity
-- **Dynamic Programming:** Overkill for this problem
-
-## Related Problems
-- **AC:** [TwoPointers problems - similar two pointer technique]
-- **Kunal:** [Array problems with area calculations]
-- **LeetCode:** [Container With Most Water - Problem 11]
+- Brute Force: Try all pairs O(n²) time
+- Divide and Conquer: Recursive approach with similar complexity
+- Dynamic Programming: Overkill for this problem
 
 ## Personal Notes
 Classic two pointers optimization. Key insight is that moving the shorter line pointer is always optimal. The greedy approach works because we start with maximum width and progressively trade width for potentially better height. Essential for understanding pointer movement strategies.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing AC Arrays implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
 
 ---
 **Tags:** #arrays #twoPointers #greedy #areaCalculation #optimization 

@@ -1,7 +1,6 @@
 # Reverse Array
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -38,19 +37,16 @@ Use the two-pointer technique with pointers at the beginning and end of the arra
 - [x] Even length array - All elements are swapped
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static void reverseArray(int[] arr) {
     int left = 0;
     int right = arr.length - 1;
-    
     while (left < right) {
         // Swap elements at left and right positions
         int temp = arr[left];
         arr[left] = arr[right];
         arr[right] = temp;
-        
         // Move pointers toward center
         left++;
         right--;
@@ -59,26 +55,13 @@ public static void reverseArray(int[] arr) {
 ```
 
 ## Alternative Approaches
-1. **Extra Space:** O(n) space - create new array and copy in reverse order
-2. **Recursion:** O(n) space - recursive function with stack overhead
-3. **Two Pointers:** O(1) space - optimal solution implemented above
-4. **Stack:** O(n) space - push all elements, then pop back to array
-
-## Related Problems
-- **AC:** Rotate Array, Palindrome Array
-- **Kunal:** Array Rotation, String Reversal
-- **LeetCode:** #344 Reverse String, #189 Rotate Array
+- Extra Space: O(n) space - create new array and copy in reverse order
+- Recursion: O(n) space - recursive function with stack overhead
+- Two Pointers: O(1) space - optimal solution implemented above
+- Stack: O(n) space - push all elements, then pop back to array
 
 ## Personal Notes
-- Fundamental two-pointer technique problem
-- Foundation for many array manipulation problems
-- Important to understand in-place operations
-- Pattern reused in palindrome checking and array rotation
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented two-pointer approach, understood in-place operations
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+Fundamental two-pointer technique problem. Foundation for many array manipulation problems. Important to understand in-place operations. Pattern reused in palindrome checking and array rotation.
 
 ---
 **Tags:** #arrays #twopointers #inplace #easy #fundamental 

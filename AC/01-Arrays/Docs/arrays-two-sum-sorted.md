@@ -1,7 +1,6 @@
 # Two Sum in Sorted Array
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -39,7 +38,6 @@ Use two pointers technique taking advantage of sorted property. Start with point
 - [x] Negative numbers in sorted array
 
 ## Solution Code
-
 ```java
 // Language: Java
 class Solution {
@@ -63,22 +61,12 @@ class Solution {
 ```
 
 ## Alternative Approaches
-- **HashMap Approach:** O(n) time, O(n) space (unnecessary for sorted array)
-- **Binary Search:** For each element, binary search for complement O(n log n)
-- **Brute Force:** Nested loops O(n²) time
-
-## Related Problems
-- **AC:** [TwoSum.java - unsorted array with HashMap]
-- **Kunal:** [Two pointer problems in sorted arrays]
-- **LeetCode:** [Two Sum II - Problem 167 (this exact problem)]
+- HashMap Approach: O(n) time, O(n) space (unnecessary for sorted array)
+- Binary Search: For each element, binary search for complement O(n log n)
+- Brute Force: Nested loops O(n²) time
 
 ## Personal Notes
 Optimal solution for sorted arrays. Demonstrates how sorted property enables space-efficient solutions. Two pointers technique is fundamental for many array problems. Note the 1-indexed return requirement.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing AC Arrays implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
 
 ---
 **Tags:** #arrays #twoPointers #sortedArray #optimization #spaceEfficient 

@@ -1,7 +1,6 @@
 # Trapping Rain Water
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Hard  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -43,14 +42,12 @@ Use two pointers approach from both ends. The key insight is that water level at
 - [x] Valley shape - Calculates trapped water correctly
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int trap(int[] height) {
     int left = 0, right = height.length - 1;
     int leftMax = 0, rightMax = 0;
     int water = 0;
-    
     while (left <= right) {
         if (height[left] <= height[right]) {
             // Process left side
@@ -70,32 +67,18 @@ public static int trap(int[] height) {
             right--;
         }
     }
-    
     return water;
 }
 ```
 
 ## Alternative Approaches
-1. **Brute Force:** O(n²) - for each position, find left and right maximums
-2. **Dynamic Programming:** O(n) time, O(n) space - precompute left and right max arrays
-3. **Stack-based:** O(n) time, O(n) space - use stack to track potential water boundaries
-4. **Two Pointers:** O(n) time, O(1) space - optimal solution implemented above
-
-## Related Problems
-- **AC:** Container With Most Water, Largest Rectangle in Histogram
-- **Kunal:** Similar two-pointer problems
-- **LeetCode:** #42 Trapping Rain Water, #11 Container With Most Water
+- Brute Force: O(n²) - for each position, find left and right maximums
+- Dynamic Programming: O(n) time, O(n) space - precompute left and right max arrays
+- Stack-based: O(n) time, O(n) space - use stack to track potential water boundaries
+- Two Pointers: O(n) time, O(1) space - optimal solution implemented above
 
 ## Personal Notes
-- This is a classic two-pointer problem that requires careful thinking about invariants
-- The key insight is understanding which side determines the water level
-- Excellent problem for practicing two-pointer technique and spatial reasoning
-- Important to visualize the problem to understand the algorithm
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented two-pointer approach, understood the invariant logic
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+This is a classic two-pointer problem that requires careful thinking about invariants. The key insight is understanding which side determines the water level. Excellent problem for practicing two-pointer technique and spatial reasoning. Important to visualize the problem to understand the algorithm.
 
 ---
 **Tags:** #arrays #twopointers #hard #geometry #water 

@@ -1,7 +1,6 @@
 # Linear Search
 
 **Source:** AC | **Topic:** Arrays | **Difficulty:** Easy  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
 
 ---
 
@@ -40,7 +39,6 @@ Check each element in the array sequentially from left to right until the target
 - [x] Multiple occurrences - Return first occurrence
 
 ## Solution Code
-
 ```java
 // Language: Java
 public static int linearSearch(int[] arr, int target) {
@@ -54,26 +52,13 @@ public static int linearSearch(int[] arr, int target) {
 ```
 
 ## Alternative Approaches
-1. **Binary Search:** O(log n) time - but requires sorted array
-2. **Hash Table:** O(1) search time - but requires O(n) preprocessing space
-3. **Enhanced Linear Search:** Use sentinel values or two-pointer optimization
-4. **Recursive Linear Search:** O(n) time, O(n) space - recursive implementation
-
-## Related Problems
-- **AC:** Binary Search, Find All Occurrences, Search in Rotated Array
-- **Kunal:** Search in 2D Array, Pattern Searching
-- **LeetCode:** #704 Binary Search, #33 Search in Rotated Sorted Array
+- Binary Search: O(log n) time - but requires sorted array
+- Hash Table: O(1) search time - but requires O(n) preprocessing space
+- Enhanced Linear Search: Use sentinel values or two-pointer optimization
+- Recursive Linear Search: O(n) time, O(n) space - recursive implementation
 
 ## Personal Notes
-- Most basic search algorithm - foundation for understanding searching
-- Only search algorithm that works on unsorted data
-- Often used as baseline for comparing other search algorithms
-- Important to understand when to use linear vs binary search
-
-## Revision History
-- **First Solve:** 2024-12-19 - Implemented basic linear search, understood sequential searching
-- **Review 1:** (scheduled for 2024-12-20)
-- **Review 2:** (to be scheduled)
+Most basic search algorithm - foundation for understanding searching. Only search algorithm that works on unsorted data. Often used as baseline for comparing other search algorithms. Important to understand when to use linear vs binary search.
 
 ---
 **Tags:** #arrays #searching #linear #fundamental #unsorted 
