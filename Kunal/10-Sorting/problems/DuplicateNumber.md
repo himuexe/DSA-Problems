@@ -1,18 +1,42 @@
-# Duplicate Number - Kunal Implementation
+# Duplicate Number
+
+**Source:** Kunal | **Topic:** Sorting | **Difficulty:** Medium  
+
+---
 
 ## Problem Statement
 Find the duplicate number in an array of integers where each integer is in the range [1, n] and there is exactly one duplicate.
 
-## Algorithm Overview
+## Intuition/Approach
 Uses **Cyclic Sort** to place numbers at their correct positions, then identify the position where the expected number is not present.
 
-## Key Approach & Intuition
-1. **Cyclic Sort**: Attempt to place each number at index `number-1`
-2. **Duplicate Detection**: When sorting completes, scan for first mismatch
-3. **Index Mismatch**: Position where `nums[i] != i+1` contains the duplicate
-4. **Direct Return**: The value at the mismatched position is the duplicate
+**Key Insight:** After cyclic sorting, the first position where `nums[i] != i+1` contains the duplicate. The duplicate value displaces another number from its correct position.
 
-## Code Implementation
+## Key Observations
+- **Range Validation:** `arr[i] <= arr.length` handles boundary conditions
+- **Duplicate Displacement:** Duplicate value displaces another number from its correct position
+- **First Mismatch:** The first position where value ≠ expected index+1 contains duplicate
+- **No False Positives:** Algorithm guarantees finding the actual duplicate
+
+## Algorithm Steps
+1. **Apply Cyclic Sort:** Place each number at index `number-1`
+2. **Range Check:** Ensure `arr[i] <= arr.length` before swapping
+3. **Scan for Mismatch:** Find first position where `nums[i] != i+1`
+4. **Return Duplicate:** The value at the mismatched position is the duplicate
+
+## Complexity Analysis
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(1)
+- **Justification:** Cyclic sort takes O(n) time, and linear scan takes O(n) time, totaling O(n). Only constant extra space is used.
+
+## Edge Cases Considered
+- [x] Duplicate is the smallest number
+- [x] Duplicate is the largest number
+- [x] Duplicate appears multiple times
+- [x] Array with minimum size (n+1 where one number repeats)
+
+## Solution Code
+
 ```java
 public int findDuplicate(int[] nums) {
     sort(nums);
@@ -37,61 +61,16 @@ public void sort(int[] arr) {
 }
 ```
 
-## Key Observations
-- **Range Validation**: `arr[i] <= arr.length` handles boundary conditions
-- **Duplicate Displacement**: Duplicate value displaces another number from its correct position
-- **First Mismatch**: The first position where value ≠ expected index+1 contains duplicate
-- **No False Positives**: Algorithm guarantees finding the actual duplicate
-
-## Complexity Analysis
-- **Time Complexity**: O(n) - cyclic sort + linear scan
-- **Space Complexity**: O(1) - only uses constant extra space
-
-## Edge Cases Considered
-- Duplicate is the smallest number
-- Duplicate is the largest number
-- Duplicate appears multiple times
-- Array with minimum size (n+1 where one number repeats)
-
-## Test Case
-```java
-Input: [1,3,4,2,2] (duplicate: 2)
-After sort: [1,2,4,2,3] (position 2 has wrong value)
-Expected Output: 2
-
-Input: [3,1,3,4,2] (duplicate: 3)
-Expected Output: 3
-```
-
 ## Alternative Approaches
-1. **Floyd's Cycle Detection**: Treat as linked list cycle problem
-2. **Hash Set**: Track seen numbers
-3. **Binary Search**: On value range
-4. **Bit Manipulation**: XOR-based approach
-5. **Mathematical**: Sum comparison
+1. **Floyd's Cycle Detection:** Treat as linked list cycle problem
+2. **Hash Set:** Track seen numbers
+3. **Binary Search:** On value range
+4. **Bit Manipulation:** XOR-based approach
+5. **Mathematical:** Sum comparison
 
-## Advantages of Cyclic Sort Approach
-- **Linear Time**: O(n) optimal complexity
-- **In-Place**: No additional data structures
-- **Simple Logic**: Easy to understand and implement
-- **Single Pass**: One sort + one scan
+## Personal Notes
+This problem elegantly demonstrates how cyclic sort can be used for duplicate detection. The key insight is that after sorting, any index-value mismatch directly reveals the duplicate. While Floyd's cycle detection is more optimal for this specific problem (as it doesn't modify the array), the cyclic sort approach provides a clear and intuitive solution that's easy to understand and implement.
 
-## Disadvantages
-- **Array Modification**: Changes original array
-- **Range Dependent**: Requires numbers in specific range
-- **Not Optimal**: Floyd's algorithm doesn't modify array
+---
 
-## Related Problems
-- Find Missing Number
-- Find All Missing Numbers
-- First Missing Positive
-- Set Mismatch
-
-## LeetCode Reference
-**Problem 287**: Find the Duplicate Number
-
-## Difficulty Level
-**Medium** - Applies cyclic sort to duplicate detection
-
-## Source
-Kunal Kushwaha - 10-Sorting Module 
+**Tags:** #sorting #cyclicsort #arrays #duplicates #medium 

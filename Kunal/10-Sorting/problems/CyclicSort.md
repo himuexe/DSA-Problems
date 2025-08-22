@@ -1,18 +1,43 @@
-# Cyclic Sort - Kunal Implementation
+# Cyclic Sort
+
+**Source:** Kunal | **Topic:** Sorting | **Difficulty:** Medium  
+
+---
 
 ## Problem Statement
 Implement Cyclic Sort algorithm to sort an array containing numbers from 1 to N.
 
-## Algorithm Overview
+## Intuition/Approach
 **Cyclic Sort** is a specialized sorting algorithm designed for arrays containing numbers in a specific range (1 to N). It places each number at its correct index position.
 
-## Key Approach & Intuition
-1. **Index Mapping**: Number `n` should be at index `n-1`
-2. **Correct Position**: For each element, calculate where it should be placed
-3. **Swap to Position**: If element is not in correct position, swap it
-4. **Continue Until Sorted**: Only increment index when element is correctly placed
+**Key Insight:** Number `n` should be at index `n-1`. For each element, calculate where it should be placed and swap it to the correct position. Only increment the index when an element is correctly placed.
 
-## Code Implementation
+## Key Observations
+- **Direct Placement:** Each number is placed directly at its target position
+- **No Comparisons:** Unlike comparison-based sorts, uses index calculation
+- **Conditional Increment:** Index only increments when element is correctly placed
+- **Perfect for Range:** Optimal for consecutive numbers starting from 1
+
+## Algorithm Steps
+1. **Initialize:** Start with index `i = 0`
+2. **Calculate Position:** For current element `arr[i]`, calculate correct position as `correctPos = arr[i] - 1`
+3. **Check Position:** If `arr[i] != arr[correctPos]`, swap elements
+4. **Increment Conditionally:** Only increment `i` when element is in correct position
+5. **Repeat:** Continue until all elements are in correct positions
+
+## Complexity Analysis
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(1)
+- **Justification:** Each element is moved at most once to its correct position, and we use only constant extra space
+
+## Edge Cases Considered
+- [x] Array with single element (correct by definition)
+- [x] Already sorted array (quick verification)
+- [x] Reverse sorted array (maximum swaps needed)
+- [x] Array with all elements in wrong positions
+
+## Solution Code
+
 ```java
 public static void sort(int[] arr) {
     int i = 0;
@@ -29,51 +54,14 @@ public static void sort(int[] arr) {
 }
 ```
 
-## Key Observations
-- **Direct Placement**: Each number is placed directly at its target position
-- **No Comparisons**: Unlike comparison-based sorts, uses index calculation
-- **Conditional Increment**: Index only increments when element is correctly placed
-- **Perfect for Range**: Optimal for consecutive numbers starting from 1
+## Alternative Approaches
+1. **Comparison-based sorts:** Bubble, Insertion, Selection (O(n²) time)
+2. **Efficient sorts:** Merge, Quick, Heap (O(n log n) time)
+3. **Counting sort:** O(n) time but O(n) space for general arrays
 
-## Complexity Analysis
-- **Time Complexity**: O(n) - each element is moved at most once to its correct position
-- **Space Complexity**: O(1) - only uses constant extra space
+## Personal Notes
+Cyclic sort is a specialized algorithm that achieves O(n) time complexity for arrays containing numbers 1 to N. The key insight is using index mapping instead of comparisons. This algorithm is particularly useful for problems involving finding missing numbers, duplicates, or set mismatches in constrained ranges.
 
-## Edge Cases Considered
-- Array with single element (correct by definition)
-- Already sorted array (quick verification)
-- Reverse sorted array (maximum swaps needed)
-- Array with all elements in wrong positions
+---
 
-## Test Case
-```java
-Input: [2,1,3,5,4]
-Output: [1,2,3,4,5]
-```
-
-## Advantages
-- **Linear Time**: O(n) time complexity for specific range
-- **In-Place**: No additional space required
-- **Optimal**: Best possible time complexity for this problem type
-
-## Disadvantages
-- **Limited Scope**: Only works for specific range (1 to N)
-- **Not General Purpose**: Cannot handle arbitrary arrays
-- **Range Dependent**: Requires prior knowledge of value range
-
-## Related Concepts
-- Index-based sorting
-- Range-specific algorithms
-- Cycle detection patterns
-
-## Applications
-- Finding missing numbers
-- Detecting duplicates
-- Set mismatch problems
-- First missing positive
-
-## Difficulty Level
-**Medium** - Specialized algorithm with specific use cases
-
-## Source
-Kunal Kushwaha - 10-Sorting Module 
+**Tags:** #sorting #cyclicsort #arrays #indexmapping #medium 

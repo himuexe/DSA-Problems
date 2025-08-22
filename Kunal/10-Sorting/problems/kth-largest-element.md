@@ -1,16 +1,17 @@
-# Kth Largest Element - QuickSelect Algorithm
+# Kth Largest Element
+
+**Source:** Kunal | **Topic:** Sorting | **Difficulty:** Medium  
+
+---
 
 ## Problem Statement
-**LeetCode Problem:** Find the kth largest element in an unsorted array without fully sorting the array.
+Find the kth largest element in an unsorted array without fully sorting the array.
 
 ## Intuition/Approach
 **QuickSelect Algorithm (Modified QuickSort):**
-1. **Partition Strategy:** Use QuickSort partitioning to place pivot in correct position
-2. **Selective Recursion:** Only recurse on the partition containing the target element
-3. **Index Conversion:** Convert "kth largest" to array index (length - k)
-4. **Early Termination:** Stop when pivot index equals target index
+Uses QuickSort partitioning to place pivot in correct position, then selectively recurses on the partition containing the target element.
 
-**Key Insight:** Don't need to sort entire array, just find the element at the correct position.
+**Key Insight:** Don't need to sort entire array, just find the element at the correct position. Convert "kth largest" to array index (length - k) and use partitioning to find it efficiently.
 
 ## Key Observations
 - **Partial Sorting:** Only sorts as much as needed to find target element
@@ -21,24 +22,14 @@
 
 ## Algorithm Steps
 1. **Index Conversion:** Convert kth largest to 0-based index (nums.length - k)
-2. **QuickSelect Process:**
-   - Partition array around last element (pivot)
-   - If pivot index == target index: Found kth largest
-   - If pivot index < target index: Search right partition
-   - If pivot index > target index: Search left partition
-3. **Partitioning (Lomuto):**
-   - Use last element as pivot
-   - Maintain partition index i (elements ≤ pivot)
-   - Swap elements ≤ pivot to left side
-   - Place pivot in correct position
+2. **QuickSelect Process:** Partition array around last element (pivot)
+3. **Recursive Search:** If pivot index == target index, found kth largest; otherwise recurse on appropriate partition
+4. **Partitioning (Lomuto):** Use last element as pivot, maintain partition index, swap elements ≤ pivot to left side
 
-## Time & Space Complexity
-- **Time Complexity:** 
-  - Average: O(n) - each level processes fewer elements
-  - Worst: O(n²) - when pivot is always min/max element
-- **Space Complexity:** O(log n)
-  - Recursion stack: O(log n) average, O(n) worst case
-  - In-place partitioning: O(1) additional space
+## Complexity Analysis
+- **Time Complexity:** O(n) average, O(n²) worst case
+- **Space Complexity:** O(log n) average, O(n) worst case
+- **Justification:** Average case: each level processes fewer elements. Worst case: when pivot is always min/max element. Space: recursion stack depth.
 
 ## Edge Cases Considered
 - [x] k = 1 (largest element)
@@ -49,7 +40,8 @@
 - [x] Reverse sorted array
 - [x] Array with duplicates
 
-## Code Implementation
+## Solution Code
+
 ```java
 public int findKthLargest(int[] nums, int k) {
     // Convert kth largest to 0-based index
@@ -91,34 +83,15 @@ private void swap(int[] nums, int i, int j) {
 }
 ```
 
-## Example Walkthrough
-**Input:** nums = [3, 2, 1, 5, 6, 4], k = 2 (2nd largest)
-**Target Index:** 6 - 2 = 4 (0-based index for 2nd largest)
+## Alternative Approaches
+1. **Heap-based:** Build max heap, extract k times (O(n + k log n))
+2. **Sorting:** Full sort then return kth element (O(n log n))
+3. **Counting sort:** For small range integers (O(n + range))
+4. **Randomized QuickSelect:** Better average case performance
 
-**Step 1:** Partition around pivot = 4
-- Result: [3, 2, 1, 4, 6, 5], pivot index = 3
-- pi = 3 < target = 4, search right: quickSelect([6, 5], 4, 5, 4)
-
-**Step 2:** Partition around pivot = 5  
-- Result: [3, 2, 1, 4, 5, 6], pivot index = 4
-- pi = 4 == target = 4, **Found!** Return nums[4] = 5
-
-**Final Result:** 5 (2nd largest element)
-
-## Key Learning Points
-- **QuickSelect Optimization:** Selective recursion improves average performance
-- **Lomuto Partitioning:** Single-pointer partition scheme implementation
-- **Index Conversion:** Understanding kth largest vs array index mapping
-- **Early Termination:** Stop when target position found
-
-## Applications
-- **Top-K Problems:** Finding top k elements efficiently
-- **Statistics:** Finding median, percentiles without full sorting
-- **Database Queries:** ORDER BY with LIMIT optimization
-- **Competitive Programming:** Efficient selection algorithms
+## Personal Notes
+QuickSelect is an elegant optimization of QuickSort for selection problems. The key insight is that we only need to partition until we find the target element, avoiding unnecessary sorting. The Lomuto partitioning scheme makes the implementation clean and efficient. This algorithm is particularly useful for finding medians, percentiles, and top-k elements without full sorting.
 
 ---
-**Date:** June 27, 2025  
-**Topic:** Selection Algorithms & Sorting  
-**Difficulty:** Intermediate  
-**Category:** QuickSelect / LeetCode Problem 
+
+**Tags:** #sorting #quickselect #quicksort #selection #medium 
