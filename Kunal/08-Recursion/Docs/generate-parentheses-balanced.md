@@ -1,91 +1,61 @@
 # Generate Balanced Parentheses
 
+**Source:** Kunal | **Topic:** Backtracking | **Difficulty:** Medium  
+
+---
+
 ## Problem Statement
-Generate all combinations of well-formed parentheses for n pairs of parentheses. Each valid combination must have exactly n opening and n closing parentheses, properly balanced.
+Generate all well-formed parentheses strings with n pairs.
 
 ## Intuition/Approach
-The algorithm uses recursive backtracking with balance tracking:
-1. Build parentheses string character by character
-2. Track count of opening and closing parentheses used
-3. Add opening parenthesis when count < n
-4. Add closing parenthesis when count < opening count (maintains balance)
-5. When string length reaches 2n, add valid combination to results
+- Backtracking with counts of open and close used.
+- Add '(' if open < n; add ')' if close < open to maintain balance.
+- When length reaches 2n, record the string.
 
 ## Key Observations
-- **Balance Constraint**: Closing parentheses count never exceeds opening count
-- **Length Constraint**: Final string must have exactly 2n characters
-- **Greedy Valid Construction**: Only add closing when it maintains validity
-- **Complete Generation**: Explores all valid parentheses arrangements
+- Validity invariant: close ≤ open at all times.
+- Exactly 2n characters in each output.
+- Count equals the nth Catalan number.
 
 ## Algorithm Steps
-1. **Initialize**: Start DFS with empty string and zero counts
-2. **DFS with Balance Tracking**:
-   - **Base Case**: If string length equals 2n, add to results
-   - **Add Opening**: If open count < n, add '(' and recurse
-   - **Add Closing**: If close count < open count, add ')' and recurse
-3. **Return**: All valid balanced parentheses combinations
+1. If length == 2n, add current string to results.
+2. If open < n, recurse with '(' and open+1.
+3. If close < open, recurse with ')' and close+1.
 
-## Time & Space Complexity
-- **Time Complexity**: O(4^n / √n)
-  - This is the nth Catalan number: C_n = (2n)!/(n!(n+1)!)
-  - Approximately 4^n / (√π × n^(3/2))
-- **Space Complexity**: O(4^n / √n)
-  - Stores all valid combinations
-  - Recursion depth is at most 2n
+## Complexity Analysis
+- **Time Complexity:** O(Cn) ≈ O(4^n / n^{3/2})
+- **Space Complexity:** O(Cn)
+- **Justification:** Number of outputs dominates; recursion depth up to 2n.
 
 ## Edge Cases Considered
-- n = 0: Returns empty list or single empty string
-- n = 1: Returns single combination "()"
-- Large n: Exponential growth in number of valid combinations
+- [x] n = 0
+- [x] n = 1
+- [x] Large n (output explosion)
 
-## Code Implementation
+## Solution Code
+
 ```java
 import java.util.*;
 class Solution {
-    private void dfs(List<String> list, int max, String str, int open, int close){
-        if(max * 2 == str.length()){
-            list.add(str);
-            return;
-        }
-        if(open < max){
-            dfs(list, max, str + "(", open + 1, close);
-        }
-        if(close < open){
-            dfs(list, max, str + ")", open, close + 1);
-        }
+    private void dfs(List<String> out, int n, String curr, int open, int close) {
+        if (curr.length() == 2 * n) { out.add(curr); return; }
+        if (open < n) dfs(out, n, curr + "(", open + 1, close);
+        if (close < open) dfs(out, n, curr + ")", open, close + 1);
     }
-
     public List<String> generateParenthesis(int n) {
-        List<String> list = new ArrayList<>();
-        dfs(list, n, "", 0, 0);
-        return list;
+        List<String> out = new ArrayList<>();
+        dfs(out, n, "", 0, 0);
+        return out;
     }
 }
 ```
 
-## Example Usage
-```java
-// Example 1: 3 pairs
-int n1 = 3;
-// Output: ["((()))", "(()())", "(())()", "()(())", "()()()"]
+## Alternative Approaches
+- Use StringBuilder for fewer allocations.
+- DP by constructing sets for k from 0..n via Catalan recurrence.
 
-// Example 2: 1 pair
-int n2 = 1;
-// Output: ["()"]
+## Personal Notes
+- Great example of constraint-guarded generation with minimal pruning logic.
 
-// Example 3: 2 pairs
-int n3 = 2;
-// Output: ["(())", "()()"]
-```
-
-## Optimization Opportunities
-1. **StringBuilder**: Use StringBuilder instead of string concatenation
-2. **Iterative Approach**: Use stack-based iteration to avoid recursion overhead
-3. **Mathematical Generation**: Use combinatorial algorithms for direct generation
-4. **Memoization**: Cache intermediate results (though limited benefit for this problem)
-
-## Real-World Applications
-- **Code Generation**: Generating balanced bracket structures in programming
-- **Mathematical Expressions**: Creating valid mathematical expression templates
-- **Tree Structures**: Representing binary tree structures with parentheses notation
-- **Compiler Design**: Parsing and validating nested structures in language design 
+---
+**Tags:** #backtracking #catalan #strings

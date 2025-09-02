@@ -1,9 +1,13 @@
 # Maze Problems - Path Counting and Generation
 
+**Source:** Kunal | **Topic:** Recursion/Combinatorics | **Difficulty:** Medium  
+
+---
+
 ## Problem Statement
 Two related maze problems:
-1. **Count Paths:** Calculate total number of paths from (r,c) to (1,1) moving only down or right
-2. **Generate Paths:** List all possible paths from (r,c) to (1,1) with directional strings
+1. Count paths from (r,c) to (1,1) with only down/right moves.
+2. Generate all such paths as strings of moves.
 
 ## Intuition/Approach
 **Recursive Path Exploration:**
@@ -31,15 +35,10 @@ Two related maze problems:
 2. **Down Movement:** If r>1, recurse with path+'D' and r-1
 3. **Right Movement:** If c>1, recurse with path+'R' and c-1
 
-## Time & Space Complexity
-- **Time Complexity:** O(2^(r+c))
-  - Each position has 2 choices (down/right)
-  - Exponential recursive calls without memoization
-  - Path generation: O(number of paths × path length)
+## Complexity Analysis
+- **Time Complexity:** O(2^(r+c)) (naive)
 - **Space Complexity:** O(r+c)
-  - Recursion stack depth: maximum r+c-2 levels
-  - Path string storage: O(r+c) per path
-  - No additional data structures for counting
+- **Justification:** Binary branching per step; depth ~ r+c.
 
 ## Edge Cases Considered
 - [x] Single cell (1,1) - one path of length 0
@@ -48,7 +47,7 @@ Two related maze problems:
 - [x] Small grids (2×2, 3×3)
 - [x] Large grids (exponential growth)
 
-## Code Implementation
+## Solution Code
 ```java
 public class Maze {
     
@@ -134,7 +133,6 @@ For 3×3 grid: C(3+3-2, 3-1) = C(4,2) = 4!/(2!×2!) = 6 ✓
 - **Algorithm Design:** Understanding recursive problem decomposition
 
 ---
-**Date:** June 28, 2025  
-**Topic:** Recursion & Path Generation  
-**Difficulty:** Intermediate  
-**Category:** Combinatorial Recursion 
+
+---
+**Tags:** #recursion #paths #combinatorics

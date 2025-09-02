@@ -1,99 +1,73 @@
 # Combination Sum - Unlimited Element Reuse
 
+**Source:** Kunal | **Topic:** Backtracking | **Difficulty:** Medium  
+
+---
+
 ## Problem Statement
-Find all unique combinations in candidates array where the candidate numbers sum to target. The same number may be chosen from candidates unlimited number of times.
+Given a list of candidate numbers (no duplicates) and a target, find all unique combinations where candidates sum to target. A candidate may be used unlimited times.
 
 ## Intuition/Approach
-The algorithm uses backtracking with DFS to explore all possible combinations:
-1. For each element, decide whether to include it in the current combination
-2. If included, continue searching with the same element (unlimited reuse)
-3. Use running sum to track progress toward target
-4. Backtrack when sum exceeds target or target is reached
-5. Use start index to avoid duplicate combinations
+- Backtrack with index `start` to avoid permuting the same combination.
+- Reuse allowed: after including `candidates[i]`, recurse with the same `i`.
+- Prune when running sum exceeds target (or use remaining-target style).
 
 ## Key Observations
-- **Unlimited Reuse**: Same element can be used multiple times in one combination
-- **No Duplicates**: Start index prevents generating duplicate combinations
-- **Pruning**: Early termination when sum exceeds target
-- **Complete Search**: Explores all valid combination paths
+- Sorting helps early break when candidate > remaining.
+- Using remaining target simplifies comparisons and pruning.
+- Solutions are combinations, not permutations; keep non-decreasing order via `start`.
 
 ## Algorithm Steps
-1. **Initialize**: Create empty result list and start DFS
-2. **DFS with Backtracking**:
-   - **Base Cases**: 
-     - If sum equals target: add combination to results
-     - If sum exceeds target: return (pruning)
-   - **Choice Loop**: For each element from start index to end:
-     - **Include**: Add element to current combination
-     - **Recurse**: Continue with same start index (allowing reuse)
-     - **Backtrack**: Remove element and try next option
-3. **Return**: All valid combinations that sum to target
+1. If `rem == 0`, add a copy of current list to output and return.
+2. For `i` from `start` to end:
+   - If `candidates[i] > rem`, break (when sorted).
+   - Add `candidates[i]`, recurse with `i` and `rem - candidates[i]`.
+   - Backtrack by removing last.
 
-## Time & Space Complexity
-- **Time Complexity**: O(N^(T/M))
-  - N = number of candidates
-  - T = target value
-  - M = minimal value among candidates
-  - In worst case, explores all possible combinations
-- **Space Complexity**: O(T/M)
-  - Maximum recursion depth is T/M (using smallest element)
-  - Space for storing combinations varies based on solutions
+## Complexity Analysis
+- **Time Complexity:** Exponential in worst case (problem intrinsic)
+- **Space Complexity:** O(T/min) recursion depth
+- **Justification:** Branching on candidate choices; depth bounded by remaining/ min candidate.
 
 ## Edge Cases Considered
-- Target is 0: Returns empty combination
-- No valid combinations: Returns empty list
-- Single element solutions: Handles direct matches
-- Large target values: Efficient pruning prevents excessive exploration
+- [x] Target = 0 → empty combination
+- [x] No solution cases
+- [x] Single candidate equals target
+- [x] Large target (pruning important)
 
-## Code Implementation
+## Solution Code
+
 ```java
 import java.util.*;
 class Solution {
-    private void dfs(int[] nums, List<List<Integer>> list, List<Integer> comb, 
-                    int target, int sum, int start){
-        if(sum == target){
-            list.add(new ArrayList<>(comb));
+    private void dfs(int[] nums, List<List<Integer>> out, List<Integer> comb, int rem, int start) {
+        if (rem == 0) {
+            out.add(new ArrayList<>(comb));
             return;
         }
-        else if(sum > target){
-            return;
-        }
-        for(int i = start; i < nums.length; i++){
+        for (int i = start; i < nums.length; i++) {
+            if (nums[i] > rem) continue; // if sorted, could break
             comb.add(nums[i]);
-            dfs(nums, list, comb, target, sum + nums[i], i);
+            dfs(nums, out, comb, rem - nums[i], i);
             comb.remove(comb.size() - 1);
         }
     }
-    
+
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> list = new ArrayList<>();
-        dfs(candidates, list, new ArrayList<>(), target, 0, 0);
-        return list;
+        List<List<Integer>> out = new ArrayList<>();
+        Arrays.sort(candidates);
+        dfs(candidates, out, new ArrayList<>(), target, 0);
+        return out;
     }
 }
 ```
 
-## Example Usage
-```java
-// Example 1: Multiple solutions
-int[] candidates1 = {2, 3, 6, 7};
-int target1 = 7;
-// Output: [[2,2,3], [7]]
+## Alternative Approaches
+- BFS over remaining target states.
+- DP counting (number of ways) rather than listing combinations.
 
-// Example 2: Unlimited reuse
-int[] candidates2 = {2, 3, 5};
-int target2 = 8;
-// Output: [[2,2,2,2], [2,3,3], [3,5]]
-```
+## Personal Notes
+- Sort for better pruning and consistent output ordering.
 
-## Optimization Opportunities
-1. **Array Sorting**: Sort candidates to enable early termination in loops
-2. **Target Tracking**: Pass remaining target instead of sum for cleaner logic
-3. **Memoization**: Cache results for repeated subproblems (though limited benefit)
-4. **Iterative Approach**: Use stack-based iteration for memory efficiency
-
-## Real-World Applications
-- **Coin Change Problems**: Finding ways to make change with unlimited coin supply
-- **Resource Allocation**: Distributing unlimited resources to reach target capacity
-- **Recipe Optimization**: Finding ingredient combinations to reach nutritional targets
-- **Financial Planning**: Investment combinations to reach specific portfolio values 
+---
+**Tags:** #backtracking #combinations #unbounded

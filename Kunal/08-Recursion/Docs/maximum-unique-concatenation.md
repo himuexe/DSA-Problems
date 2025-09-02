@@ -1,106 +1,79 @@
 # Maximum Length Unique Character Concatenation
 
+**Source:** Kunal | **Topic:** Backtracking/Bitmask | **Difficulty:** Medium  
+
+---
+
 ## Problem Statement
-Given an array of strings, find the maximum length of a string that can be formed by concatenating some strings from the array such that all characters in the resulting string are unique.
+From an array of strings, select a subset to concatenate such that all characters are unique; return the maximum possible length.
 
 ## Intuition/Approach
-The algorithm uses backtracking to explore all possible combinations of strings:
-1. For each string in the array, decide whether to include it in the concatenation
-2. Before including, check if adding the string maintains unique character property
-3. Explore both choices: include current string or skip it
-4. Track the maximum length achieved across all valid combinations
-5. Use character frequency counting to validate uniqueness
+- Backtrack over strings deciding include/skip.
+- Validate uniqueness before including by checking character occurrences.
+- Bitmask representation (26-bit) speeds up uniqueness tests and unions.
 
 ## Key Observations
-- **Uniqueness Constraint**: All characters in final string must be unique
-- **Combination Problem**: Choose subset of strings to maximize length
-- **Validation Required**: Check character uniqueness before adding each string
-- **Optimization**: Use frequency array for efficient character counting
+- Any string with internal duplicates can be discarded upfront.
+- Using bitmasks enables O(1) merge and conflict checks via AND/OR.
 
 ## Algorithm Steps
-1. **Initialize**: Start DFS with empty concatenated string
-2. **DFS with String Selection**:
-   - **Base Case**: Processed all strings, return current length
-   - **Validation**: Check if adding current string maintains uniqueness
-   - **Include Choice**: If valid, add string and recurse
-   - **Skip Choice**: Always recurse without adding current string
-   - **Maximum**: Return maximum of both choices
-3. **Return**: Maximum length of valid unique character concatenation
+1. Preprocess: convert each string to bitmask; drop invalid strings (duplicate chars).
+2. DFS(index, usedMask, currLen):
+   - Update global max with `currLen`.
+   - For i from index..n-1:
+     - If `(usedMask & mask[i]) == 0`, recurse with `usedMask | mask[i]` and length + len[i].
 
-## Time & Space Complexity
-- **Time Complexity**: O(2^n × m)
-  - 2^n possible combinations of n strings
-  - O(m) time to validate uniqueness for each combination (m = average string length)
-- **Space Complexity**: O(n × m)
-  - Recursion depth at most n
-  - String concatenation space proportional to total character count
+## Complexity Analysis
+- **Time Complexity:** O(2^n) in worst case
+- **Space Complexity:** O(n)
+- **Justification:** Subset exploration; recursion depth ≤ n.
 
 ## Edge Cases Considered
-- Empty array: Returns 0
-- Single string: Returns string length if all characters unique, 0 otherwise
-- No valid combinations: Returns 0 when no subset has unique characters
-- All strings invalid: Individual strings with duplicate characters
+- [x] Empty array → 0
+- [x] Strings with internal duplicates
+- [x] All strings mutually conflicting → 0 or max single length
 
-## Code Implementation
+## Solution Code
+
 ```java
 import java.util.*;
 class Solution {
-    private boolean isUnique(String str){
-        int[] arr = new int[26];
-        for(int i = 0; i < str.length(); i++){
-            arr[str.charAt(i) - 'a']++;
-        }
-        for(int i = 0; i < arr.length; i++){
-            if(arr[i] > 1){
-                return false;
+    private int dfs(int[] masks, int[] lens, int idx, int used, int curr) {
+        int best = curr;
+        for (int i = idx; i < masks.length; i++) {
+            if ((used & masks[i]) == 0) {
+                best = Math.max(best, dfs(masks, lens, i + 1, used | masks[i], curr + lens[i]));
             }
         }
-        return true;
+        return best;
     }
 
-    private int dfs(List<String> arr, String str, int curr){
-        if(curr == arr.size()){
-            return str.length();
-        }
-        int left = 0, right = 0;
-        String temp = str + arr.get(curr);
-        if(isUnique(temp)){
-            left = dfs(arr, temp, curr + 1);
-        }
-        right = dfs(arr, str, curr + 1);
-        return Math.max(left, right);
-    }
-    
     public int maxLength(List<String> arr) {
-        return dfs(arr, "", 0);
+        List<Integer> masksList = new ArrayList<>();
+        List<Integer> lensList = new ArrayList<>();
+        for (String s : arr) {
+            int mask = 0; boolean ok = true;
+            for (char ch : s.toCharArray()) {
+                int bit = ch - 'a';
+                if (bit < 0 || bit >= 26) { ok = false; break; }
+                if (((mask >> bit) & 1) == 1) { ok = false; break; }
+                mask |= 1 << bit;
+            }
+            if (ok) { masksList.add(mask); lensList.add(s.length()); }
+        }
+        int[] masks = masksList.stream().mapToInt(Integer::intValue).toArray();
+        int[] lens = lensList.stream().mapToInt(Integer::intValue).toArray();
+        return dfs(masks, lens, 0, 0, 0);
     }
 }
 ```
 
-## Example Usage
-```java
-// Example 1: Multiple valid combinations
-List<String> arr1 = Arrays.asList("un", "iq", "ue");
-// Output: 4 (concatenate "un" + "iq" = "uniq")
+## Alternative Approaches
+- Pure string-based checking with boolean[26] per step (simpler, slower).
+- Sort by length descending to explore promising branches first.
 
-// Example 2: Skip invalid strings
-List<String> arr2 = Arrays.asList("cha", "r", "act", "ers");
-// Output: 6 (concatenate "cha" + "r" + "act" = "charact" is invalid due to 'c')
-// Correct: "cha" + "r" = "char" (4) or "act" + "ers" = "acters" (6)
+## Personal Notes
+- Bitmasking drastically improves speed and makes pruning trivial.
 
-// Example 3: No valid combinations
-List<String> arr3 = Arrays.asList("aa", "bb");
-// Output: 0 (both strings have duplicate characters)
-```
-
-## Optimization Opportunities
-1. **Early Pruning**: Pre-filter strings with duplicate characters
-2. **Bit Manipulation**: Use bitmask to represent character sets for faster validation
-3. **Memoization**: Cache results for repeated subproblems
-4. **Greedy Approach**: Sort strings by length and prioritize longer unique strings
-
-## Real-World Applications
-- **Password Generation**: Creating secure passwords with unique character requirements
-- **DNA Sequencing**: Finding maximum unique subsequence combinations
-- **Text Processing**: Combining text fragments while maintaining character diversity
-- **Resource Optimization**: Selecting resources to maximize coverage without overlap 
+---
+**Tags:** #backtracking #bitmask #strings

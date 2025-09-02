@@ -1,106 +1,76 @@
 # Partition K Equal Sum Subsets
 
+**Source:** Kunal | **Topic:** Backtracking | **Difficulty:** Hard  
+
+---
+
 ## Problem Statement
-Given an integer array nums and an integer k, return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
+Given an integer array nums and an integer k, determine if you can partition nums into k non-empty subsets with equal sum.
 
 ## Intuition/Approach
-The algorithm uses backtracking to systematically try to build k subsets with equal sums:
-1. Calculate total sum and check if divisible by k
-2. Find target sum for each subset (total_sum / k)
-3. Use backtracking to try assigning each number to different subsets
-4. Track visited elements to avoid reuse
-5. When one subset reaches target sum, start building the next subset
+- Total sum must be divisible by k; target = sum/k.
+- Backtrack assigning elements to the current bucket until target is reached, then move to next bucket.
+- Track visited elements to avoid reuse; sort descending to prune early.
 
 ## Key Observations
-- **Divisibility Check**: Total sum must be divisible by k
-- **Target Sum**: Each subset must sum to exactly (total_sum / k)
-- **Complete Partitioning**: Every element must be used exactly once
-- **Optimization**: Process elements in reverse order for better pruning
+- If any element > target, impossible.
+- Symmetry: filling buckets in identical states should be avoided (prune duplicates).
 
 ## Algorithm Steps
-1. **Preprocessing**: 
-   - Calculate total sum and validate divisibility by k
-   - Calculate target sum for each subset
-2. **Backtracking Logic**:
-   - **Success Base Case**: All k subsets successfully created
-   - **Subset Completion**: When current subset reaches target sum, start next subset
-   - **Element Choice**: Try each unvisited element for current subset
-   - **Pruning**: Skip elements that exceed remaining sum or create duplicates
-   - **Backtrack**: Unmark element and try next option
-3. **Return**: True if valid partitioning exists, false otherwise
+1. Compute sum; if sum % k != 0, return false; target = sum/k; sort nums desc.
+2. DFS over indices from high to low with `visited[]`, `currSum`, and remaining `k`.
+3. When `currSum == target`, recurse with `k-1`, `currSum = 0` and restart index.
+4. Skip duplicates and numbers that exceed remaining capacity.
 
-## Time & Space Complexity
-- **Time Complexity**: O(k × 2^n)
-  - In worst case, explores all possible subsets for each of k partitions
-  - Pruning significantly reduces actual complexity
-- **Space Complexity**: O(n)
-  - Visited boolean array of size n
-  - Recursion depth at most n
+## Complexity Analysis
+- **Time Complexity:** Exponential, ~O(k · 2^n) worst-case
+- **Space Complexity:** O(n)
+- **Justification:** Subset search with pruning; visited array of size n.
 
 ## Edge Cases Considered
-- k = 1: Always possible if array is non-empty
-- k > n: Impossible (more subsets than elements)
-- Sum not divisible by k: Immediately return false
-- Large elements: Element larger than target sum makes partitioning impossible
+- [x] k = 1
+- [x] k > n
+- [x] sum % k != 0
+- [x] max(nums) > target
 
-## Code Implementation
+## Solution Code
+
 ```java
+import java.util.*;
 class Solution {
-    private boolean dfs(int[] nums, boolean[] visited, int k, int targetSum, 
-                       int currSum, int index){
-        if(k == 0) return true;
-        if(targetSum == currSum){
-            return dfs(nums, visited, k - 1, targetSum, 0, nums.length - 1);
-        }
-        for(int i = index; i >= 0; i--){
-            if(visited[i]) continue;
-            if(i + 1 < nums.length && nums[i] == nums[i + 1] && !visited[i + 1]) continue;
-            if(currSum + nums[i] > targetSum) continue;
-            visited[i] = true;
-            if(dfs(nums, visited, k, targetSum, currSum + nums[i], i - 1)) return true;
-            visited[i] = false;
+    private boolean dfs(int[] nums, boolean[] used, int k, int target, int curr, int start) {
+        if (k == 0) return true;
+        if (curr == target) return dfs(nums, used, k - 1, target, 0, 0);
+        for (int i = start; i < nums.length; i++) {
+            if (used[i]) continue;
+            if (curr + nums[i] > target) continue;
+            used[i] = true;
+            if (dfs(nums, used, k, target, curr + nums[i], i + 1)) return true;
+            used[i] = false;
+            while (i + 1 < nums.length && nums[i] == nums[i + 1]) i++; // skip dups
         }
         return false;
     }
 
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        int sum = 0;
-        for(int num : nums){
-            sum += num;
+        int sum = 0; for (int v : nums) sum += v;
+        if (k <= 0 || sum % k != 0) return false;
+        int target = sum / k;
+        Arrays.sort(nums);
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] > target) return false;
         }
-        if(sum % k != 0) return false;
-        int targetSum = sum / k;
-        return dfs(nums, new boolean[nums.length], k, targetSum, 0, nums.length - 1);
+        boolean[] used = new boolean[nums.length];
+        return dfs(nums, used, k, target, 0, 0);
     }
 }
 ```
 
-## Example Usage
-```java
-// Example 1: Possible partition
-int[] nums1 = {4, 3, 2, 3, 5, 2, 1};
-int k1 = 4;
-// Output: true (subsets: [5], [1, 4], [2, 3], [2, 3])
+## Alternative Approaches
+- Bitmask DP on subsets with memoization (state = bitmask, bucket sum mod target).
 
-// Example 2: Impossible partition
-int[] nums2 = {1, 2, 3, 4};
-int k2 = 3;
-// Output: false
+## Personal Notes
+- Sorting descending and early checks make a big practical difference.
 
-// Example 3: Edge case
-int[] nums3 = {1, 1, 1, 1};
-int k3 = 2;
-// Output: true (subsets: [1, 1], [1, 1])
-```
-
-## Optimization Opportunities
-1. **Array Sorting**: Sort array in descending order for better pruning
-2. **Duplicate Handling**: More efficient duplicate element skipping
-3. **Memoization**: Cache states to avoid repeated computations
-4. **Bit Manipulation**: Use bitmask to represent visited states more efficiently
-
-## Real-World Applications
-- **Load Balancing**: Distributing tasks equally among k servers
-- **Resource Allocation**: Dividing resources into equal groups
-- **Team Formation**: Creating balanced teams with equal total skill points
-- **Scheduling**: Partitioning jobs into equal-duration time slots 
+---
+**Tags:** #backtracking #partition #subset
