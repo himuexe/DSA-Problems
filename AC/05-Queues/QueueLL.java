@@ -1,34 +1,38 @@
-public class QueueArray{
-    static class Queue {
-        static int arr[];
-        static int size;
-        static int rear;
-        Queue(int n){
-            arr = new int[n];
-            size = n;
-            rear = -1;
+public class QueueLL {
+    static class Node{
+        int data;
+        Node next;
+        Node(int data){
+            this.data = data;
+            this.next = null;
         }
+    }
+    static class Queue{
+        static Node head = null;
+        static Node tail = null;
         public static boolean isEmpty(){
-            return rear == -1;
+            return head == null && tail == null;
         }
         public static void add(int data){
-            if(rear == size - 1){
-                System.out.println("Queue is full");
+            Node newNode = new Node(data);
+            if(tail == null){
+                head = tail = newNode;
                 return;
             }
-            rear++;
-            arr[rear] = data;
+            tail.next = newNode;
+            tail = newNode;
         }
         public static int remove(){
             if(isEmpty()){
                 System.out.println("Queue is empty");
                 return -1;
             }
-            int front = arr[0];
-            for(int i = 0; i < rear; i++){
-                arr[i] = arr[i + 1];
+            int front = head.data;
+            if(head == tail){
+                head = tail = null;
+            } else {
+                head = head.next;
             }
-            rear--;
             return front;
         }
         public static int peek(){
@@ -36,11 +40,11 @@ public class QueueArray{
                 System.out.println("Queue is empty");
                 return -1;
             }
-            return arr[0];
+            return head.data;
         }
     }
     public static void main(String[] args){
-        Queue q = new Queue(5);
+        Queue q = new Queue();
         q.add(1);
         q.add(2);
         q.add(3);
