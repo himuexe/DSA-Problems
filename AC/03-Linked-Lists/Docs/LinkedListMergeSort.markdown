@@ -39,86 +39,54 @@ Recursively split the list into two halves using Floyd’s algorithm to find the
 
 ## Solution Code
 ```java
-public class SortLL {
-    class Node {
-        int data;
-        Node next;
-        Node(int data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    private Node head;
-    private Node tail;
-    private int size;
-
-    public void addFirst(int data) {
-        Node newNode = new Node(data);
-        size++;
-        if (head == null) {
-            head = tail = newNode;
-            return;
-        }
-        newNode.next = head;
-        head = newNode;
-    }
-
-    private Node getMid(Node head) {
-        Node slow = head;
-        Node fast = head.next;
+class Solution {
+    private ListNode getMid(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next; // Start fast one step ahead
+        
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-        return slow;
+        return slow; // Returns the node just before the middle
     }
-
-    private Node merge(Node head1, Node head2) {
-        Node mergedLL = new Node(-1);
-        Node temp = mergedLL;
+    
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        
+        ListNode mid = getMid(head);
+        ListNode rightHead = mid.next;
+        mid.next = null; // Split the list
+        
+        ListNode left = sortList(head);
+        ListNode right = sortList(rightHead);
+        
+        return merge(left, right);
+    }
+    
+    private ListNode merge(ListNode head1, ListNode head2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+        
         while (head1 != null && head2 != null) {
-            if (head1.data <= head2.data) {
-                temp.next = head1;
+            if (head1.val <= head2.val) {
+                current.next = head1;
                 head1 = head1.next;
             } else {
-                temp.next = head2;
+                current.next = head2;
                 head2 = head2.next;
             }
-            temp = temp.next;
+            current = current.next;
         }
+        
+        // Attach remaining elements
         if (head1 != null) {
-            temp.next = head1;
+            current.next = head1;
+        } else {
+            current.next = head2;
         }
-        if (head2 != null) {
-            temp.next = head2;
-        }
-        return mergedLL.next;
-    }
-
-    public Node mergeSort(Node head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        Node mid = getMid(head);
-        Node rightHead = mid.next;
-        mid.next = null;
-        Node newLeft = mergeSort(head);
-        Node newRight = mergeSort(rightHead);
-        return merge(newLeft, newRight);
-    }
-
-    public void print() {
-        if (head == null) {
-            System.out.println("LL is empty");
-            return;
-        }
-        Node temp = head;
-        while (temp != null) {
-            System.out.print(temp.data + "->");
-            temp = temp.next;
-        }
-        System.out.println("null");
+        
+        return dummy.next;
     }
 }
 ```

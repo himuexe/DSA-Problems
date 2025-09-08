@@ -1,9 +1,6 @@
 # Stack Implementation Using ArrayList
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Easy  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Easy  
 
 ## Problem Statement
 
@@ -42,7 +39,7 @@ The key insight is that ArrayList provides O(1) access to the last element, maki
 - **Time Complexity:** O(1) for all operations (push, pop, peek, isEmpty)
 - **Space Complexity:** O(n) - where n is number of elements in stack
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty stack → isEmpty() returns true, pop/peek handle gracefully
 - [ ] Single element → pop makes stack empty
@@ -102,13 +99,6 @@ public class StackArrayList{
 2. **LinkedList-based Stack:** Use linked list for dynamic allocation
 3. **Built-in Stack:** Use Java's built-in Stack class
 
-## Related Problems
-
-- **Stack Using Linked List** (alternative implementation)
-- **Queue Using ArrayList** (similar ArrayList usage)
-- **Dynamic Array Implementation** (understanding ArrayList internals)
-- **Deque Implementation** (double-ended queue using ArrayList)
-
 ## Personal Notes
 
 - Simplest stack implementation using built-in data structures
@@ -116,11 +106,5 @@ public class StackArrayList{
 - Demonstrates how ArrayList can be adapted for stack operations
 - Practical approach for most real-world applications
 
-## Tags
-
-`#stack` `#arraylist` `#implementation` `#data-structure` `#easy` `#dynamic-array`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #arraylist #implementation #data-structure #easy #dynamic-array

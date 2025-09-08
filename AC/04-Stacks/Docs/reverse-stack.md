@@ -1,9 +1,6 @@
 # Reverse Stack Using Recursion
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -43,7 +40,7 @@ The key insight is that recursion naturally provides the temporary storage neede
 - **Time Complexity:** O(n²) - For each element, pushAtBottom takes O(n) time
 - **Space Complexity:** O(n) - Recursion stack depth
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty stack → remains empty
 - [ ] Single element → remains unchanged
@@ -112,13 +109,6 @@ public class ReverseStack {
 2. **Array-based:** Convert to array, reverse, convert back
 3. **Iterative with Queue:** Use queue for temporary storage
 
-## Related Problems
-
-- **Push at Bottom of Stack** (helper function used)
-- **Sort Stack Using Recursion** (similar recursive approach)
-- **Reverse String Using Stack** (related reversal problem)
-- **Reverse Linked List** (similar reversal concept)
-
 ## Personal Notes
 
 - Elegant demonstration of recursion power
@@ -126,11 +116,5 @@ public class ReverseStack {
 - Important for understanding recursive problem decomposition
 - Good practice for recursive thinking and stack manipulation
 
-## Tags
-
-`#stack` `#recursion` `#in-place` `#medium` `#elegant-solution` `#interview-prep`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #recursion #in-place #medium #elegant-solution #interview-prep

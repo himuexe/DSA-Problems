@@ -1,9 +1,6 @@
 # Next Greater Element
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -41,7 +38,7 @@ The key insight is that when processing element i, all elements to the right hav
 - **Time Complexity:** O(n) - Each element pushed and popped at most once
 - **Space Complexity:** O(n) - Stack space and result array
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty array → empty result
 - [ ] Single element → -1 (no greater element)
@@ -94,13 +91,6 @@ public class NextGreaterElement {
 2. **Left-to-right traversal:** Process elements left to right (more complex)
 3. **Circular array variant:** Use modulo arithmetic for circular next greater
 
-## Related Problems
-
-- **Next Greater Element II** (LeetCode 503) - Circular array version
-- **Daily Temperatures** (LeetCode 739) - Find next warmer day
-- **Maximum Area in Histogram** (uses next smaller element)
-- **Stock Span Problem** (similar stack-based approach)
-
 ## Personal Notes
 
 - Fundamental monotonic stack problem
@@ -108,11 +98,5 @@ public class NextGreaterElement {
 - Important for understanding decreasing/increasing stack patterns
 - Common building block for more complex stack algorithms
 
-## Tags
-
-`#stack` `#monotonic-stack` `#next-greater-element` `#array` `#medium` `#template-problem`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #monotonic-stack #next-greater-element #array #medium #template-problem

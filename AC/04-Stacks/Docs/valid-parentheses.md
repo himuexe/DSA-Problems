@@ -1,9 +1,6 @@
 # Valid Parentheses
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Easy  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Easy  
 
 ## Problem Statement
 
@@ -48,7 +45,7 @@ The stack ensures proper nesting and matching of bracket types.
 - **Time Complexity:** O(n) - Single pass through string
 - **Space Complexity:** O(n) - Stack space in worst case (all opening brackets)
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty string → valid (true)
 - [ ] Single opening bracket → invalid
@@ -106,13 +103,6 @@ public class ValidPar {
 2. **Recursive:** Recursively check for matching brackets
 3. **HashMap-based:** Use HashMap to map closing brackets to opening brackets
 
-## Related Problems
-
-- **Generate Parentheses** (LeetCode 22)
-- **Minimum Remove to Make Valid Parentheses** (LeetCode 1249)
-- **Longest Valid Parentheses** (LeetCode 32)
-- **Remove Invalid Parentheses** (LeetCode 301)
-
 ## Personal Notes
 
 - Fundamental stack problem - excellent for understanding stack basics
@@ -120,11 +110,5 @@ public class ValidPar {
 - Foundation for more complex bracket and expression problems
 - Very common in technical interviews as a warm-up question
 
-## Tags
-
-`#stack` `#parentheses` `#bracket-matching` `#easy` `#fundamental` `#interview-prep`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #parentheses #bracket-matching #easy #fundamental #interview-prep

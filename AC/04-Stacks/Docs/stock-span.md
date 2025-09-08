@@ -1,9 +1,6 @@
 # Stock Span Problem
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -46,7 +43,7 @@ The key insight is that once a day's price is lower than current day, all days b
 - **Time Complexity:** O(n) - Each element pushed and popped at most once
 - **Space Complexity:** O(n) - Stack space and span array
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Single day → span = 1
 - [ ] All prices decreasing → all spans = 1
@@ -104,13 +101,6 @@ public class StockSpan {
 2. **Previous Greater Element:** Find previous greater element and calculate span
 3. **Dynamic Programming:** Use memoization to avoid recalculating spans
 
-## Related Problems
-
-- **Next Greater Element** (similar stack technique)
-- **Daily Temperatures** (LeetCode 739) - Find next warmer day
-- **Online Stock Span** (LeetCode 901) - Real-time span calculation
-- **Maximum Area in Histogram** (uses similar stack approach)
-
 ## Personal Notes
 
 - Classic application of monotonic stack in finance/trading
@@ -118,11 +108,5 @@ public class StockSpan {
 - Good example of how stack maintains "relevant" previous elements
 - Common in interviews for demonstrating stack usage in real-world scenarios
 
-## Tags
-
-`#stack` `#monotonic-stack` `#time-series` `#finance` `#medium` `#array-processing`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #monotonic-stack #time-series #finance #medium #array-processing

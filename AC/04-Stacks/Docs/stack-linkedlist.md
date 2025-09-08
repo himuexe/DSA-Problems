@@ -1,9 +1,6 @@
 # Stack Implementation Using Linked List
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -45,7 +42,7 @@ The key insight is that linked list head provides O(1) access, making it ideal f
 - **Time Complexity:** O(1) for all operations (push, pop, peek, isEmpty)
 - **Space Complexity:** O(n) - where n is number of elements in stack
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty stack → isEmpty() returns true, pop/peek return -1
 - [ ] Single element → pop makes stack empty
@@ -119,13 +116,6 @@ public class StackLL {
 2. **ArrayList-based Stack:** Use dynamic array (built-in resizing)
 3. **Doubly Linked List:** Use doubly linked list (more memory overhead)
 
-## Related Problems
-
-- **Stack Using ArrayList** (alternative implementation)
-- **Queue Using Linked List** (similar linked list usage)
-- **Reverse Linked List** (similar linked list manipulation)
-- **LRU Cache** (uses linked list for stack-like operations)
-
 ## Personal Notes
 
 - Excellent for understanding linked list applications
@@ -133,11 +123,5 @@ public class StackLL {
 - Good foundation for understanding stack internals
 - Important for implementing custom data structures
 
-## Tags
-
-`#stack` `#linked-list` `#implementation` `#data-structure` `#medium` `#dynamic-memory`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #linked-list #implementation #data-structure #medium #dynamic-memory

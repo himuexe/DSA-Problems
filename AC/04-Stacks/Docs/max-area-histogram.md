@@ -1,9 +1,6 @@
 # Maximum Area in Histogram
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Hard  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Hard  
 
 ## Problem Statement
 
@@ -48,7 +45,7 @@ The maximum area rectangle with bar i as the shortest bar will have:
 - **Time Complexity:** O(n) - Each element pushed and popped once from stack
 - **Space Complexity:** O(n) - Stack space and NSR/NSL arrays
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty array → return 0
 - [ ] Single element → return element value
@@ -120,13 +117,6 @@ public class MaxAreaHistogram {
 2. **Single Pass Stack:** Calculate area while finding next smaller elements in single traversal
 3. **Divide and Conquer:** Recursively find maximum area in left and right subarrays
 
-## Related Problems
-
-- **Largest Rectangle in Binary Matrix** (2D extension)
-- **Maximal Rectangle** (LeetCode 85)
-- **Next Greater Element** (core stack technique)
-- **Stock Span Problem** (similar stack approach)
-
 ## Personal Notes
 
 - Classic stack problem demonstrating monotonic stack technique
@@ -134,11 +124,5 @@ public class MaxAreaHistogram {
 - Foundation for 2D matrix rectangle problems
 - Common in technical interviews for stack data structure questions
 
-## Tags
-
-`#stack` `#monotonic-stack` `#next-smaller-element` `#histogram` `#rectangle` `#hard` `#interview-prep`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #monotonic-stack #next-smaller-element #histogram #rectangle #hard #interview-prep

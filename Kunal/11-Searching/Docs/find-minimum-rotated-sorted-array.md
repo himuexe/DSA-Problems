@@ -1,98 +1,74 @@
-# Find Minimum in Rotated Sorted Array
+Find Minimum in Rotated Sorted Array
+Source: Kunal | Topic: Searching | Difficulty: Medium  
 
-**Source:** Kunal | **Topic:** Searching | **Difficulty:** Medium  
+Problem Statement
+Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+Intuition/Approach
+Binary Search for Minimum Element:The rotated sorted array has a pivot point where the sorted order breaks, and the minimum element is at the start of the second sorted segment. We can use binary search to directly find this minimum element by comparing the middle element with the rightmost element to determine which half contains the minimum.
+Algorithm Strategy:
 
----
+Initialize pointers: Set left to 0 and right to the last index.
+Binary search: While left is less than right:
+Compute the middle index.
+If the middle element is greater than the rightmost element, the minimum lies in the right half.
+Otherwise, the minimum lies in the left half, including the middle element.
 
-## Problem Statement
-Suppose an array of length `n` sorted in ascending order is rotated between `1` and `n` times. Given the sorted rotated array `nums` of unique elements, return the minimum element of this array.
 
-## Intuition/Approach
-**Binary Search with Pivot Detection:**
-The key insight is that in a rotated sorted array, the minimum element is always the element right after the pivot (the largest element). We can use binary search to find the pivot efficiently.
+Return result: The minimum element is at index left.
 
-**Algorithm Strategy:**
-1. **Quick Check:** If array is not rotated (`nums[0] <= nums[n-1]`), return first element
-2. **Find Pivot:** Use binary search to locate the rotation point
-3. **Return Minimum:** The minimum is at position `pivot + 1`
+Key Observations
 
-## Key Observations
-- Non-rotated array: return first element immediately
-- Rotated array: minimum is always right after the pivot
-- Binary search reduces search space by half each iteration
-- Pivot is the point where sorted order breaks
-- Only works with unique elements (no duplicates)
+The minimum element is the first element of the second sorted segment.
+If nums[mid] > nums[right], the minimum is in the right half.
+If nums[mid] <= nums[right], the minimum is in the left half or at mid.
+The array has no duplicates, simplifying the logic.
+The approach works for both rotated and non-rotated arrays.
 
-## Algorithm Steps
-1. **Check if array is rotated:** Compare first and last elements
-2. **Binary search for pivot:**
-   - Calculate mid point
-   - Check if mid is the pivot (larger than next element)
-   - Check if mid-1 is the pivot (smaller than previous element)
-   - Decide which half to search based on comparison with left boundary
-3. **Return minimum:** Element at position `pivot + 1`
+Algorithm Steps
 
-## Complexity Analysis
-- **Time Complexity:** O(log n)
-- **Space Complexity:** O(1)
-- **Justification:** Binary search through the array with constant extra space
+Set left = 0 and right = nums.length - 1.
+While left < right:
+Calculate mid = left + (right - left) / 2.
+If nums[mid] > nums[right], set left = mid + 1.
+Else, set right = mid.
 
-## Edge Cases Considered
-- [x] Array not rotated (already sorted)
-- [x] Array rotated once (minimum at index 1)
-- [x] Array rotated n-1 times (minimum at last position)
-- [x] Single element array
-- [x] Two element array
 
-## Solution Code
+Return nums[left] as the minimum element.
 
-```java
+Complexity Analysis
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+Justification: Binary search halves the search space in each iteration, using only constant extra space.
+
+Edge Cases Considered
+
+ Array not rotated (already sorted)
+ Array rotated once (minimum at index 1)
+ Array rotated n-1 times (minimum at last position)
+ Single element array
+ Two element array
+
+Solution Code
 class Solution {
     public int findMin(int[] nums) {
-        // If the array is not rotated, just return the first element
-        if (nums[0] <= nums[nums.length - 1]) {
-            return nums[0];
-        }
-        
-        int pivot = findPivot(nums);
-        return nums[pivot + 1];
-    }
-    
-    private int findPivot(int[] nums) {
-        int left = 0;
-        int right = nums.length - 1;
-        
-        while (left <= right) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
             int mid = left + (right - left) / 2;
-            
-            // Check if mid is the pivot
-            if (mid < right && nums[mid] > nums[mid + 1]) {
-                return mid;
-            }
-            if (mid > left && nums[mid] < nums[mid - 1]) {
-                return mid - 1;
-            }
-            
-            // Decide which half to search
-            if (nums[mid] <= nums[left]) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
+            if (nums[mid] > nums[right]) left = mid + 1;
+            else right = mid;
         }
-        return -1;
+        return nums[left];
     }
 }
-```
 
-## Alternative Approaches
-1. **Direct Binary Search:** Modify binary search to find minimum directly
-2. **Linear Search:** O(n) approach by scanning entire array
-3. **Divide and Conquer:** Recursive approach with similar logic
+Alternative Approaches
 
-## Personal Notes
-This problem demonstrates the power of binary search for finding specific elements in rotated sorted arrays. The key insight is identifying the pivot point where the sorted order breaks, then finding the minimum element right after it. The binary search approach achieves O(log n) time complexity, making it much more efficient than linear search.
+Pivot-Based Binary Search: Find the pivot point explicitly, then return the next element.
+Linear Search: Scan the entire array to find the minimum (O(n) time).
+Divide and Conquer: Recursively divide the array to find the minimum.
 
----
+Personal Notes
+The updated approach simplifies the original by directly searching for the minimum element instead of explicitly finding the pivot. By comparing the middle element with the rightmost element, we efficiently narrow down the search space. This method is more concise and avoids the need for a separate pivot-finding function, while maintaining O(log n) time complexity.
 
-**Tags:** #searching #binarysearch #rotatedarray #minimum #medium 
+Tags: #searching #binarysearch #rotatedarray #minimum #medium

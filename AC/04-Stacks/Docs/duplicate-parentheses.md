@@ -1,9 +1,6 @@
 # Duplicate Parentheses Detection
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -46,7 +43,7 @@ The key insight is that valid parentheses must contain at least one operator or 
 - **Time Complexity:** O(n) - Single pass through string
 - **Space Complexity:** O(n) - Stack space for storing characters
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty string → no duplicates
 - [ ] Single pair "()" → has duplicates  
@@ -100,13 +97,6 @@ public class DuplicatePar {
 2. **Regex-based:** Use regular expressions to find duplicate patterns
 3. **Recursive:** Recursively check for nested duplicate parentheses
 
-## Related Problems
-
-- **Valid Parentheses** (basic parentheses validation)
-- **Minimum Remove to Make Valid Parentheses** (LeetCode 1249)
-- **Remove Duplicate Letters** (stack-based duplicate removal)
-- **Balanced Parentheses** (general parentheses problems)
-
 ## Personal Notes
 
 - Important for expression parsing and validation
@@ -114,11 +104,5 @@ public class DuplicatePar {
 - Common in compiler design and mathematical expression processing
 - Good practice for understanding stack-based counting techniques
 
-## Tags
-
-`#stack` `#parentheses` `#duplicate-detection` `#expression-parsing` `#medium` `#string-processing`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #parentheses #duplicate-detection #expression-parsing #medium #string-processing

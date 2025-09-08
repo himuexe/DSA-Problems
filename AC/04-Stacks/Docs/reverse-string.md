@@ -1,9 +1,6 @@
 # Reverse String Using Stack
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Easy  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Easy  
 
 ## Problem Statement
 
@@ -38,7 +35,7 @@ The stack acts as a temporary storage that naturally reverses the order due to i
 - **Time Complexity:** O(n) - Single pass to push + single pass to pop
 - **Space Complexity:** O(n) - Stack space for storing characters
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty string → empty result
 - [ ] Single character → same character
@@ -88,13 +85,6 @@ public class ReverseString {
 3. **Built-in Methods:** Use StringBuilder.reverse() or Collections.reverse()
 4. **Character Array:** Convert to char array and reverse in-place
 
-## Related Problems
-
-- **Reverse Words in String** (reverse word order)
-- **Palindrome Check** (check if string equals its reverse)
-- **Reverse Stack** (similar stack reversal concept)
-- **Valid Parentheses** (another stack-based string problem)
-
 ## Personal Notes
 
 - Excellent introductory stack problem
@@ -102,11 +92,5 @@ public class ReverseString {
 - Good for understanding LIFO principle
 - Simple but effective illustration of stack usage
 
-## Tags
-
-`#stack` `#string` `#reversal` `#easy` `#fundamental` `#lifo`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #string #reversal #easy #fundamental #lifo

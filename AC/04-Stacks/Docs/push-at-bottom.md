@@ -1,9 +1,6 @@
 # Push Element at Bottom of Stack
 
-**Source:** AC (Apna College)  
-**Topic:** Stacks  
-**Difficulty:** Medium  
-**Date:** 2025-07-05
+**Source:** AC | **Topic:** Stacks | **Difficulty:** Medium  
 
 ## Problem Statement
 
@@ -38,7 +35,7 @@ The key insight is that recursion naturally provides temporary storage for stack
 - **Time Complexity:** O(n) - Visit each element once
 - **Space Complexity:** O(n) - Recursion stack depth
 
-## Edge Cases
+## Edge Cases Considered
 
 - [ ] Empty stack → element becomes only element
 - [ ] Single element stack → new element at bottom, original at top
@@ -87,13 +84,6 @@ public class PushAtBottom {
 2. **Array-based:** Convert to array, insert at beginning, convert back
 3. **Iterative with Queue:** Use queue for temporary storage
 
-## Related Problems
-
-- **Reverse Stack Using Recursion** (uses this as helper function)
-- **Sort Stack Using Recursion** (similar recursive pattern)
-- **Insert Element in Sorted Stack** (similar insertion concept)
-- **Reverse Linked List** (similar recursive reversal pattern)
-
 ## Personal Notes
 
 - Fundamental recursive stack operation
@@ -101,11 +91,5 @@ public class PushAtBottom {
 - Demonstrates elegance of recursion for stack manipulation
 - Important for understanding how recursion can replace iterative auxiliary structures
 
-## Tags
-
-`#stack` `#recursion` `#helper-function` `#medium` `#fundamental` `#insertion`
-
 ---
-
-**Revision History:**
-- 2025-07-05: Initial documentation with comprehensive algorithm analysis 
+**Tags:** #stack #recursion #helper-function #medium #fundamental #insertion
