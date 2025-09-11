@@ -1,70 +1,62 @@
 # 132 Pattern Detection
 
-**Source:** Kunal | **Topic:** Arrays | **Difficulty:** Medium  
-**Date Solved:** June 26, 2025 | **Revision Due:** July 3, 2025 | **Status:** Solved
+**Source:** Kunal | **Topic:** Stacks | **Difficulty:** Medium  
 
 ---
 
 ## Problem Statement
-Given an array of integers, find if there exists a subsequence of length 3 with indices i < j < k such that nums[i] < nums[k] < nums[j]. This is known as the 132 pattern.
+Given an array of integers, determine whether there exists a subsequence of length 3 with indices i < j < k such that nums[i] < nums[k] < nums[j]. This is known as the 132 pattern.
 
 ## Intuition/Approach
-Use a combination of preprocessing and stack-based approach. First, precompute minimum values from left. Then traverse from right using a stack to find valid 132 patterns by maintaining potential middle elements.
+Use preprocessing plus a stack. Precompute the minimum value up to each index to serve as potential nums[i]. Traverse from right to left keeping a decreasing stack of candidates for nums[k]. For each nums[j], discard stack elements ≤ min[i], check if the top is < nums[j] to confirm a 132 pattern.
 
 ## Key Observations
-- Need three indices i < j < k with nums[i] < nums[k] < nums[j]
-- Precompute minimum values up to each position for efficient lookup
-- Use stack to maintain decreasing sequence of potential middle elements
-- Process from right to left to efficiently find valid patterns
+- Need i < j < k with nums[i] < nums[k] < nums[j].
+- Prefix minima array lets us quickly test a valid nums[i] for each position.
+- Right-to-left traversal with a monotonic stack efficiently finds feasible nums[k] values.
 
 ## Algorithm Steps
-1. Create min array where min[i] = minimum value from index 0 to i
-2. Initialize empty stack and traverse array from right to left (starting from index 1)
-3. For each position i, if nums[i] > min[i]:
-   - Remove elements from stack that are ≤ min[i] (too small to be valid)
-   - Check if stack top exists and is < nums[i] (valid 132 pattern found)
-   - Push nums[i] to stack as potential middle element
-4. Return true if pattern found, false otherwise
+1. Build `min[i]` as the minimum of `nums[0..i]`.
+2. Initialize an empty stack.
+3. For `j` from right to left:
+   - If `nums[j] > min[j]`:
+     - Pop while `stack.top() <= min[j]`.
+     - If stack not empty and `stack.top() < nums[j]`, return true.
+     - Push `nums[j]` onto the stack.
+4. Return false if no pattern found.
 
 ## Complexity Analysis
-- **Time Complexity:** O(n) - single pass with each element pushed/popped at most once
-- **Space Complexity:** O(n) - for min array and stack storage
-- **Justification:** Each element is processed constant time on average
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(n)
+- **Justification:** Each element is pushed/popped at most once; prefix minima is linear.
 
 ## Edge Cases Considered
-- [x] Array length < 3 (impossible to have 132 pattern)
-- [x] Strictly increasing array (no 132 pattern)
-- [x] Strictly decreasing array (no 132 pattern)
-- [x] Array with duplicates
-- [x] Multiple valid patterns (return true for first found)
+- [x] Array length < 3
+- [x] Strictly increasing array
+- [x] Strictly decreasing array
+- [x] Duplicates present
+- [x] Multiple valid patterns (return true on first)
 
 ## Solution Code
 
 ```java
-// Language: Java
 import java.util.*;
+
 class Solution {
     public boolean find132pattern(int[] nums) {
-        if(nums.length < 3) return false;
-        
-        int[] min = new int[nums.length];
+        if (nums.length < 3) return false;
+        int n = nums.length;
+        int[] min = new int[n];
         min[0] = nums[0];
-        
-        for(int i = 1; i < nums.length; i++){
-            min[i] = Math.min(nums[i], min[i-1]);
+        for (int i = 1; i < n; i++) {
+            min[i] = Math.min(nums[i], min[i - 1]);
         }
-        
-        Stack<Integer> st = new Stack<Integer>();
-        
-        for(int i = nums.length - 1; i >= 1; i--){
-            if(nums[i] > min[i]){
-                while((!st.isEmpty()) && (st.peek() <= min[i])){
-                    st.pop();
-                }
-                if(!st.isEmpty() && st.peek() < nums[i]){
-                    return true;
-                }
-                st.push(nums[i]);
+        Stack<Integer> st = new Stack<>();
+        for (int j = n - 1; j >= 1; j--) {
+            if (nums[j] > min[j]) {
+                while (!st.isEmpty() && st.peek() <= min[j]) st.pop();
+                if (!st.isEmpty() && st.peek() < nums[j]) return true;
+                st.push(nums[j]);
             }
         }
         return false;
@@ -73,20 +65,11 @@ class Solution {
 ```
 
 ## Alternative Approaches
-- **Brute Force:** O(n³) approach checking all triplets
-- **Two-Pass Method:** Find min on left and max on right for each middle element
-- **Segment Tree:** Use advanced data structures for range queries
-
-## Related Problems
-- **AC:** [Longest Increasing Subsequence, Three Sum]
-- **Kunal:** [Next Greater Element, Valid Parentheses]
-- **LeetCode:** [456. 132 Pattern, 496. Next Greater Element I, 739. Daily Temperatures]
+- Brute force O(n³) over all triplets (too slow).
+- Two-pass with range queries or balanced BST/segment tree to find a valid `nums[k]` between prefix min and current value.
 
 ## Personal Notes
-Excellent problem combining preprocessing, stack operations, and pattern recognition. The key insight is recognizing that we need to efficiently find elements satisfying the ordering constraint. Stack maintains candidates while preprocessing ensures efficient minimum lookups.
-
-## Revision History
-- **First Solve:** June 26, 2025 - Implemented stack-based approach with preprocessing
+Preprocessing minima and scanning from the right with a monotonic stack is the standard, linear-time pattern detection strategy here.
 
 ---
-**Tags:** #stack #preprocessing #pattern #arrays #monotonic 
+**Tags:** #stacks #arrays #monotonicStack #pattern 

@@ -1,69 +1,60 @@
 # Longest Valid Parentheses
 
-**Source:** Kunal | **Topic:** Strings | **Difficulty:** Hard  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
+**Source:** Kunal | **Topic:** Stacks | **Difficulty:** Hard  
 
 ---
 
 ## Problem Statement
-Find the length of the longest valid parentheses substring. A valid parentheses substring contains properly matched opening and closing parentheses.
+Given a string consisting of '(' and ')', return the length of the longest substring that forms a valid parentheses sequence.
 
 ## Intuition/Approach
-Use stack to track indices of unmatched parentheses. The stack helps determine boundaries of valid parentheses sequences by maintaining indices of unmatched characters.
+Use a stack of indices to track the last unmatched position. Start with -1 as a sentinel. For '(', push index. For ')', pop; if the stack becomes empty, push current index as the new base; otherwise, the current valid length is `i - stack.peek()`.
 
 ## Key Observations
-- Stack tracks indices, not characters
-- Initialize stack with -1 as base for length calculation
-- For '(': push index onto stack
-- For ')': pop from stack, calculate length using remaining top
-- Empty stack after popping means current ')' is unmatched
-- Distance between current index and stack top gives valid length
+- Track indices, not characters, to derive lengths directly.
+- Sentinel `-1` seed handles the first valid span and unmatched leading ')'.
+- Each index is pushed and popped at most once.
 
 ## Algorithm Steps
-1. Initialize stack with -1 as base
-2. Iterate through string:
-   - If '(': push current index
-   - If ')': 
-     - Pop from stack
-     - If stack becomes empty: push current index (unmatched ')')
-     - Else: calculate length as (current_index - stack.top())
-3. Track maximum length found
+1. Initialize stack and push -1.
+2. For each index `i` in `s`:
+   - If `s[i] == '('`, push `i`.
+   - Else pop; if stack becomes empty, push `i`; else update `ans = max(ans, i - stack.peek())`.
+3. Return `ans`.
 
 ## Complexity Analysis
-- **Time Complexity:** O(n) where n is string length
-- **Space Complexity:** O(n) for stack in worst case
-- **Justification:** Single pass through string, stack operations are O(1)
+- **Time Complexity:** O(n)
+- **Space Complexity:** O(n) in worst case
+- **Justification:** Single pass; stack operations are O(1).
 
 ## Edge Cases Considered
-- [x] Empty string (length 0)
-- [x] String with no valid parentheses
-- [x] All opening parentheses
-- [x] All closing parentheses
+- [x] Empty string
+- [x] No valid parentheses
+- [x] All '(' characters
+- [x] All ')' characters
 - [x] Nested parentheses
-- [x] Multiple valid sequences
+- [x] Multiple disjoint valid sequences
 
 ## Solution Code
 
 ```java
-// Language: Java
 import java.util.*;
+
 class Solution {
     public int longestValidParentheses(String s) {
-        int ans =0;
+        int ans = 0;
         Stack<Integer> stack = new Stack<>();
         stack.push(-1);
-        for(int i=0;i<s.length();i++){
+        for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if(ch == '('){
+            if (ch == '(') {
                 stack.push(i);
-            }
-            else{
+            } else {
                 stack.pop();
-                if(stack.size() ==  0){
+                if (stack.isEmpty()) {
                     stack.push(i);
-                }
-                else{
-                    ans = Math.max(ans, i- stack.peek());
+                } else {
+                    ans = Math.max(ans, i - stack.peek());
                 }
             }
         }
@@ -73,22 +64,11 @@ class Solution {
 ```
 
 ## Alternative Approaches
-- **Dynamic Programming:** DP array to track valid lengths
-- **Two Pass:** Left-to-right and right-to-left counting
-- **Counter Approach:** Track balance of parentheses
-
-## Related Problems
-- **AC:** [Parentheses matching problems]
-- **Kunal:** [ValidParentheses.java - basic parentheses validation]
-- **LeetCode:** [Longest Valid Parentheses - Problem 32]
+- Dynamic programming with `dp[i]` as length ending at `i`.
+- Two-scan counter method (left-to-right, right-to-left) counting opens/closes.
 
 ## Personal Notes
-Advanced stack application for parentheses problems. The key insight is using indices instead of characters to calculate lengths. Understanding stack state transitions is crucial. This pattern extends to other bracket matching problems.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing Kunal Strings implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
+Using indices instead of characters keeps the computation simple and robust to long invalid prefixes.
 
 ---
-**Tags:** #strings #stack #parentheses #hardProblem #dynamicProgramming 
+**Tags:** #stacks #strings #parentheses #monotonicStack 

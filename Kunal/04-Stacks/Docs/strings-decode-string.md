@@ -1,103 +1,84 @@
 # Decode String
 
-**Source:** Kunal | **Topic:** Strings | **Difficulty:** Medium  
-**Date Solved:** 2024-12-19 | **Revision Due:** 2024-12-20 | **Status:** Solved
+**Source:** Kunal | **Topic:** Stacks | **Difficulty:** Medium  
 
 ---
 
 ## Problem Statement
-Decode a string encoded in format k[encoded_string]. The encoded_string inside brackets should be repeated k times. For example, "3[a2[c]]" becomes "accaccacc".
+Given an encoded string in the form `k[encoded_string]`, decode it by repeating `encoded_string` exactly `k` times. Nested encodings are allowed, e.g., `3[a2[c]] -> accaccacc`.
 
 ## Intuition/Approach
-Use two stacks: one for numbers (repetition counts) and one for strings (accumulated strings). When encountering '[', save current state. When encountering ']', restore and repeat.
+Use two stacks to handle nested structures: a number stack for repetition counts and a string stack for accumulated partial strings. On `[`, push current state; on `]`, pop state and expand; digits build multi-digit counts; letters append to the current builder.
 
 ## Key Observations
-- Nested structure requires stack for proper handling
-- Numbers can be multi-digit, need careful parsing
-- '[' marks start of new nested level
-- ']' marks end of current level, triggers repetition
-- Two stacks maintain state for nested structure
+- Nested encodings require LIFO handling, hence stacks.
+- Numbers can be multi-digit; parse completely before encountering `[`.
+- Use a `StringBuilder` for efficient concatenation.
 
 ## Algorithm Steps
-1. Initialize number stack, string stack, and StringBuilder
-2. Iterate through input string:
-   - If digit: parse complete number (handle multi-digit)
-   - If '[': push current string to stack, reset StringBuilder
-   - If ']': pop count and previous string, repeat current string
-   - If letter: append to current StringBuilder
-3. Return final string
+1. Initialize `numStack`, `strStack`, and an empty `StringBuilder curr`.
+2. Iterate characters in `s`:
+   - If digit: parse full number and push to `numStack`.
+   - If `[` : push `curr.toString()` to `strStack`; reset `curr`.
+   - If `]` : pop `k` and previous string; set `curr = prev + curr.repeat(k)`.
+   - Else: append letter to `curr`.
+3. Return `curr.toString()`.
 
 ## Complexity Analysis
-- **Time Complexity:** O(maxK^countK * n) where maxK is max repetition, countK is nested levels, n is string length
-- **Space Complexity:** O(sum of all strings in stacks)
-- **Justification:** Each character may be repeated multiple times based on nesting
+- **Time Complexity:** O(n + total_expanded_length)
+- **Space Complexity:** O(n + nesting_depth)
+- **Justification:** Each input char is processed once; expansions contribute to output size.
 
 ## Edge Cases Considered
-- [x] Single level encoding "3[a]"
-- [x] Nested encoding "2[a3[b]]"
-- [x] Multi-digit numbers "12[a]"
-- [x] Adjacent encoded strings "2[a]3[b]"
-- [x] No encoding (plain string)
+- [x] Single level encoding `3[a]`
+- [x] Nested encoding `2[a3[b]]`
+- [x] Multi-digit numbers `12[a]`
+- [x] Adjacent encoded strings `2[a]3[b]`
+- [x] Plain string with no encoding
 
 ## Solution Code
 
 ```java
-// Language: Java
 import java.util.*;
+
 class Solution {
     public String decodeString(String s) {
         Stack<Integer> numStack = new Stack<>();
         Stack<String> strStack = new Stack<>();
-        StringBuilder sb = new StringBuilder();
-        int len = s.length();
-        for(int i=0;i<s.length();i++){
+        StringBuilder curr = new StringBuilder();
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
             char ch = s.charAt(i);
-            if(Character.isDigit(ch)){
-                int num = ch -'0';
-                while(i+1< len && Character.isDigit(s.charAt(i+1))){
-                    num = num*10 + s.charAt(i+1) - '0';
+            if (Character.isDigit(ch)) {
+                int num = ch - '0';
+                while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) {
+                    num = num * 10 + (s.charAt(i + 1) - '0');
                     i++;
                 }
                 numStack.push(num);
-            }
-            else if( ch == '['){
-                strStack.push(sb.toString());
-                sb = new StringBuilder();
-            }
-            else if( ch == ']'){
+            } else if (ch == '[') {
+                strStack.push(curr.toString());
+                curr = new StringBuilder();
+            } else if (ch == ']') {
                 int k = numStack.pop();
                 StringBuilder temp = new StringBuilder(strStack.pop());
-                for(int j=0; j<k;j++){
-                    temp.append(sb);
-                }
-                sb = temp;
-            }
-            else{
-                sb.append(ch);
+                for (int j = 0; j < k; j++) temp.append(curr);
+                curr = temp;
+            } else {
+                curr.append(ch);
             }
         }
-        return sb.toString();
+        return curr.toString();
     }
 }
 ```
 
 ## Alternative Approaches
-- **Recursive Approach:** Recursive parsing with index tracking
-- **Single Stack:** Combine number and string in single stack
-- **Regular Expression:** Pattern matching (less efficient)
-
-## Related Problems
-- **AC:** [Stack-based parsing problems]
-- **Kunal:** [String manipulation with stacks]
-- **LeetCode:** [Decode String - Problem 394]
+- Recursive descent parsing with index reference.
+- Single-stack encoding of both counts and sentinel markers, though clarity may suffer.
 
 ## Personal Notes
-Complex stack application with nested structure handling. Multi-digit number parsing is tricky detail. Understanding when to save/restore state is crucial. The two-stack approach cleanly separates concerns.
-
-## Revision History
-- **First Solve:** 2024-12-19 - Documented from existing Kunal Strings implementation
-- **Review 1:** [Pending] - [Notes]
-- **Review 2:** [Pending] - [Notes]
+The two-stack approach cleanly separates count and string state and is easy to reason about for deeply nested inputs.
 
 ---
-**Tags:** #strings #stack #parsing #nestedStructure #stringBuilding 
+**Tags:** #stacks #strings #parsing #nested** 
